@@ -3,26 +3,8 @@ import { Global, css } from '@emotion/react';
 const style = css`
   @font-face {
     font-family: 'Pretendard';
-    font-weight: 700;
-    font-style: bold;
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff')
-      format('woff2');
-  }
-
-  @font-face {
-    font-family: 'Pretendard';
-    font-weight: 500;
-    font-style: medium;
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff')
-      format('woff2');
-  }
-
-  @font-face {
-    font-family: 'Pretendard';
-    font-weight: 400;
-    font-style: normal;
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
-      format('woff2');
+    font-weight: 100 900;
+    src: url('../../../public/PretendardVariable.ttf') format('woff2');
   }
 
   * {

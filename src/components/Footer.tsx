@@ -1,17 +1,17 @@
-import styled from '@emotion/styled';
-import { FooterLogo } from '../assets';
+import styled from "@emotion/styled";
+import { FooterLogo } from "../assets";
 
 export const Footer = () => {
   return (
     <FooterWrapper>
       <ContentWrapper>
         <Logo src={FooterLogo} alt="로고" />
-        <SubTitle>little에서 다양한 스타일을 발견해보세요</SubTitle>
+        <SubTitle>Little에서 쉽고 빠르게 멘토를 찾아보세요!</SubTitle>
       </ContentWrapper>
       <ContentWrapper>
         <ContentTitle>©리틀</ContentTitle>
         <ContentTitle>
-          recruit@little.kr 사업자 등록번호 : 102-1000-1000
+          recruit@little.kr 사업자 등록번호 : 777-7777-7777
         </ContentTitle>
         <ContentTitle>
           대전광역시 유성구 장동(대덕소프트웨어마이스터고등학교)
@@ -31,7 +31,7 @@ const FooterWrapper = styled.footer`
   justify-content: space-between;
   gap: 48px;
   padding: 24px 28px;
-  width: calc(100% - 80px);
+  width: 100%;
   background-color: #f8f8f8;
 `;
 
