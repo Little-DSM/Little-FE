@@ -28,8 +28,8 @@ interface IFlexType {
 }
 
 export const Flex = ({
-  height = '100vh',
-  width = '100vw',
+  height = 'auto',
+  width = 'auto',
   children,
   gap,
   gapX,
