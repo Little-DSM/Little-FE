@@ -14,6 +14,7 @@ import {
   MypageIconActive,
   SettingIcon,
 } from "../assets";
+import { MajorTag } from "./MajorTag";
 
 const NAV_ITEMS = [
   {
@@ -62,7 +63,7 @@ export const SideBar = () => {
               <Text fontSize={24} fontWeight={600}>
                 {"오찬영"}
               </Text>
-              <Major>Game</Major>
+              <MajorTag major="Game" />
             </Flex>
 
             <Text fontSize={16} fontWeight={400} color={`${colors.gray[500]}`}>
@@ -147,13 +148,6 @@ const UpdateButton = styled.button`
   position: absolute;
   bottom: 4px;
   right: 4px;
-`;
-
-const Major = styled.div`
-  padding: 6px 12px;
-  border-radius: 100px;
-  background-color: ${colors.main[1]};
-  color: white;
 `;
 
 const DrawLine = styled.div`
