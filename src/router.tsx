@@ -3,30 +3,35 @@ import { RootLayout } from './layouts';
 import TestPage from './pages/TestPage';
 import { EditPage, ViewAllPage, ViewDetailPage } from './pages';
 import { CreatePage } from './pages/CreatePage';
+import { LandingPage } from './pages/LandingPage';
 
 export const router = createBrowserRouter([
   {
     path: '/',
+    element: <LandingPage />,
+  },
+  {
+    path: '/main',
     element: <RootLayout />,
     children: [
       {
-        path: '/view',
+        path: '',
         element: <ViewAllPage />,
       },
       {
-        path: '/view/:id',
+        path: 'view/:id',
         element: <ViewDetailPage />,
       },
       {
-        path: '/create',
+        path: 'create',
         element: <CreatePage />,
       },
       {
-        path: '/edit/:id',
+        path: 'edit/:id',
         element: <EditPage />,
       },
       {
-        path: '/test',
+        path: 'test',
         element: <TestPage />,
       },
     ],

@@ -11,4 +11,7 @@ export { default as ProgressIconActive } from './progress_active.svg';
 export { default as SettingIcon } from './setting.svg';
 export { default as ProfileIcon } from './profile.svg';
 export { default as PencilIcon } from './pencil.svg';
+export { default as HomePageImg } from './HomePageImg.png';
+export { default as MypageImg } from './MypageImg.png';
+export { default as WritePageImg } from './WritePageImg.png';
 export * from './ImgAdd';
