@@ -1,21 +1,40 @@
-import styled from "@emotion/styled";
-import { colors } from "../styles/theme";
-import search from "../assets/search.svg";
+import styled from '@emotion/styled';
+import { colors, Flex, Text } from '../styles/theme';
+import search from '../assets/search.svg';
 
 interface InputType {
   placeholder: string;
-  type: "text" | "search";
+  type?: 'text' | 'search';
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   value: string;
+  label?: string;
 }
 
-const Input = ({ placeholder, type, onChange, className }: InputType) => {
+const Input = ({
+  label,
+  placeholder,
+  type = 'text',
+  onChange,
+  className,
+  value,
+}: InputType) => {
   return (
-    <InputContainer className={className}>
-      {type == "search" && <SearchIcon src={search} alt="검색" />}
-      <StyledInput placeholder={placeholder} onChange={onChange} />
-    </InputContainer>
+    <Flex isColumn gap={8} width="100%">
+      {label && (
+        <Text fontWeight={400} fontSize={16} color={colors.gray[900]}>
+          {label}
+        </Text>
+      )}
+      <InputContainer className={className}>
+        {type == 'search' && <SearchIcon src={search} alt="검색" />}
+        <StyledInput
+          value={value}
+          placeholder={placeholder}
+          onChange={onChange}
+        />
+      </InputContainer>
+    </Flex>
   );
 };
 
@@ -27,7 +46,7 @@ const InputContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px;
+  padding: 16px;
 `;
 
 const SearchIcon = styled.img`
@@ -40,6 +59,7 @@ const StyledInput = styled.input`
   height: 100%;
   background: none;
   border: none;
+  font-size: 16px;
   :focus {
     outline: none;
   }
