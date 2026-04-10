@@ -111,7 +111,7 @@ const DUMMY_POSTS = [
 
 export const Mypage = () => {
   return (
-    <Flex width="100%" gap={100}>
+    <Flex width="100%" height="80vh" gap={100}>
       <Flex isColumn={true} gap={86} paddingTop="20px" paddingLeft="20px">
         <Flex gap={40} alignItems="center">
           <Profile>

@@ -1,6 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import { RootLayout } from "./layouts";
-import { EditPage, Mypage, ViewAllPage, ViewDetailPage } from "./pages";
+import {
+  EditPage,
+  Mypage,
+  ProgressPage,
+  ViewAllPage,
+  ViewDetailPage,
+} from "./pages";
 import { CreatePage } from "./pages/CreatePage";
 import { LandingPage } from "./pages/LandingPage";
 
@@ -32,6 +38,10 @@ export const router = createBrowserRouter([
       {
         path: "my",
         element: <Mypage />,
+      },
+      {
+        path: "progress",
+        element: <ProgressPage />,
       },
     ],
   },
