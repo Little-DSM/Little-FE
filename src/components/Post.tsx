@@ -1,6 +1,6 @@
-import { Flex, Text, colors } from '../styles/theme';
-import { MajorTag } from './MajorTag';
-import viewIcon from '../assets/view_icon.svg';
+import { Flex, Text, colors } from "../styles/theme";
+import { MajorTag } from "./MajorTag";
+import viewIcon from "../assets/view_icon.svg";
 
 interface PostProps {
   title: string;
@@ -26,7 +26,7 @@ export const Post = ({
   imgUrl,
   major,
 }: PostProps) => {
-  const truncatedTitle = title.length > 20 ? title.slice(0, 20) + '...' : title;
+  const truncatedTitle = title.length > 20 ? title.slice(0, 20) + "..." : title;
 
   return (
     <Flex isColumn={true} gap={16} width="256px">
@@ -34,7 +34,7 @@ export const Post = ({
         src={imgUrl}
         width={256}
         height={184}
-        style={{ objectFit: 'cover', display: 'block', borderRadius: 16 }}
+        style={{ objectFit: "cover", display: "block", borderRadius: 16 }}
         alt={title}
       />
       <Flex isColumn={true} gap={8} width="100%">
