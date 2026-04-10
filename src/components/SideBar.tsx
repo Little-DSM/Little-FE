@@ -18,25 +18,25 @@ import { MajorTag } from "./MajorTag";
 
 const NAV_ITEMS = [
   {
-    path: "/",
+    path: "/main",
     label: "멘토 멘티 찾기",
     icon: FindIcon,
     activeIcon: FindIconActive,
   },
   {
-    path: "/add",
+    path: "/main/create",
     label: "게시물 생성",
     icon: AddIcon,
     activeIcon: AddIconActive,
   },
   {
-    path: "/progress",
+    path: "/main/progress",
     label: "나의 진행 상황",
     icon: ProgressIcon,
     activeIcon: ProgressIconActive,
   },
   {
-    path: "/my",
+    path: "/main/my",
     label: "마이페이지",
     icon: MypageIcon,
     activeIcon: MypageIconActive,
