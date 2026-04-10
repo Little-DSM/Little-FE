@@ -6,3 +6,4 @@ export * from "./MajorSelector";
 export * from "./Toggle";
 export * from "./DeleteModal";
 export * from "./ParticModal";
+export * from "./ReviewCard";
