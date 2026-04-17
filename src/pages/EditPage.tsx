@@ -24,7 +24,7 @@ export const EditPage = () => {
     isMentee: true,
   });
 
-  const handleAddImage = (index: number, file: File, preview: string) => {
+  const handleAddImage = (file: File, preview: string) => {
     setDatas((prev) => {
       if (prev.preview) URL.revokeObjectURL(prev.preview);
 
@@ -36,7 +36,7 @@ export const EditPage = () => {
     });
   };
 
-  const handleDeleteImage = (index: number) => {
+  const handleDeleteImage = () => {
     setDatas((prev) => {
       if (prev.preview) URL.revokeObjectURL(prev.preview);
 
@@ -47,6 +47,7 @@ export const EditPage = () => {
       };
     });
   };
+
   const handleOnChange = (label: string, value: string) => {
     setDatas((prev) => ({ ...prev, [label]: value }));
   };
@@ -56,7 +57,6 @@ export const EditPage = () => {
       <Flex width="100%" isColumn gap={40}>
         <ImgSelector
           preview={datas.preview}
-          index={0}
           onAdd={handleAddImage}
           onDelete={handleDeleteImage}
         />

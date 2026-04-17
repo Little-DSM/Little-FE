@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import Button from '../components/Button';
 
 export const ViewDetailPage = () => {
-  const [datas, setDatas] = useState<{
+  const [datas, _] = useState<{
     title: string;
     author: string;
     date: string;

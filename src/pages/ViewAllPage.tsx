@@ -12,7 +12,7 @@ type PostType = {
 };
 
 export const ViewAllPage = () => {
-  const [datas, setDatas] = useState<PostType[]>([
+  const [datas, _] = useState<PostType[]>([
     {
       title: 'ㅎㅇ요',
       author: '박츄츄',

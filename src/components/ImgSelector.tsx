@@ -4,18 +4,12 @@ import { colors } from '../styles/theme';
 import { useRef } from 'react';
 
 interface ImgSelectorProps {
-  index: number;
   preview: string | null;
-  onAdd: (index: number, file: File, preview: string) => void;
-  onDelete: (index: number) => void;
+  onAdd: (file: File, preview: string) => void;
+  onDelete: () => void;
 }
 
-export const ImgSelector = ({
-  index,
-  preview,
-  onAdd,
-  onDelete,
-}: ImgSelectorProps) => {
+export const ImgSelector = ({ preview, onAdd, onDelete }: ImgSelectorProps) => {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
@@ -27,14 +21,14 @@ export const ImgSelector = ({
     if (!file) return;
 
     const url = URL.createObjectURL(file);
-    onAdd(index, file, url);
+    onAdd(file, url);
 
     e.target.value = '';
   };
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onDelete(index);
+    onDelete();
   };
 
   return (
