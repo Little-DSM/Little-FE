@@ -1,9 +1,13 @@
+import { useState } from 'react';
 import styled from '@emotion/styled';
 import { colors, Flex } from '../styles/theme';
 import { HeaderLogo, HomePageImg, MypageImg, WritePageImg } from '../assets';
 import { motion } from 'framer-motion';
+import { LoginModal } from '../components/LoginModal';
 
 export const LandingPage = () => {
+  const [loginOpen, setLoginOpen] = useState(false);
+
   return (
     <Wrapper>
       {/* 첫 화면 */}
@@ -45,7 +49,11 @@ export const LandingPage = () => {
               </SubText>
             </Flex>
 
-            <Button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setLoginOpen(true)}
+            >
               <img src={HeaderLogo} alt="logo" />
               로그인하기
             </Button>
@@ -150,6 +158,8 @@ export const LandingPage = () => {
 
         <Gradient />
       </Section>
+
+      <LoginModal isOpen={loginOpen} onClose={() => setLoginOpen(false)} />
     </Wrapper>
   );
 };

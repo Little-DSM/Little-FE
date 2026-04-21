@@ -4,48 +4,26 @@ import { colors } from "../styles/theme";
 import Button from "./Button";
 import particIcon from "../assets/partic_icon.svg";
 import arrowRight from "../assets/arrow_right.svg";
-
-interface Applicant {
-  id: number;
-  name: string;
-  profileImg?: string;
-}
+import { useApplications, useSelectMentor } from "../hooks/usePosts";
 
 interface ParticModalProps {
   isOpen: boolean;
+  postId: number;
   onClose: () => void;
-  onConfirm?: (selectedId: number | null) => void;
   onPrev?: () => void;
 }
 
-const APPLICANTS: Applicant[] = [
-  {
-    id: 1,
-    name: "박지연",
-    profileImg:
-      "https://i.pinimg.com/736x/05/7a/16/057a1660313978eadc03d6d0c793b20d.jpg",
-  },
-  {
-    id: 2,
-    name: "박지연",
-    profileImg:
-      "https://i.pinimg.com/736x/a4/3e/05/a43e051017a945eddf90d667fbf3857c.jpg",
-  },
-  { id: 3, name: "박지연" },
-  { id: 4, name: "박지연" },
-  { id: 5, name: "박지연" },
-  { id: 6, name: "박지연" },
-];
-
-export const ParticModal = ({
-  isOpen,
-  onClose,
-  onConfirm,
-  onPrev,
-}: ParticModalProps) => {
+export const ParticModal = ({ isOpen, postId, onClose, onPrev }: ParticModalProps) => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const { data, isLoading } = useApplications(postId, isOpen);
+  const { mutate: selectMentor, isPending } = useSelectMentor(postId);
 
   if (!isOpen) return null;
+
+  const handleConfirm = () => {
+    if (!selectedId) return;
+    selectMentor({ mentor_id: selectedId }, { onSuccess: onClose });
+  };
 
   return (
     <Overlay onClick={onClose}>
@@ -56,21 +34,24 @@ export const ParticModal = ({
         </HeaderSection>
 
         <ListWrapper>
-          {APPLICANTS.map((applicant) => (
+          {isLoading && <EmptyText>불러오는 중...</EmptyText>}
+          {!isLoading && data?.mentors.length === 0 && (
+            <EmptyText>지원자가 없습니다.</EmptyText>
+          )}
+          {data?.mentors.map((applicant) => (
             <ApplicantRow
               key={applicant.id}
-              onClick={() => setSelectedId((prev) => prev === applicant.id ? null : applicant.id)}
+              onClick={() =>
+                setSelectedId((prev) => (prev === applicant.id ? null : applicant.id))
+              }
             >
               <RadioCircle selected={selectedId === applicant.id}>
                 {selectedId === applicant.id && <CheckMark>✓</CheckMark>}
               </RadioCircle>
               <InfoBox>
                 <ProfileAvatar>
-                  {applicant.profileImg ? (
-                    <ProfileImg
-                      src={applicant.profileImg}
-                      alt={applicant.name}
-                    />
+                  {applicant.profile_image ? (
+                    <ProfileImg src={applicant.profile_image} alt={applicant.name} />
                   ) : (
                     <DefaultIcon src={particIcon} alt="default profile" />
                   )}
@@ -87,7 +68,9 @@ export const ParticModal = ({
         </ListWrapper>
 
         <ButtonRow>
-          <Button onClick={() => onConfirm?.(selectedId)}>멘토링 진행</Button>
+          <Button onClick={handleConfirm} disabled={!selectedId || isPending}>
+            멘토링 진행
+          </Button>
           <Button
             onClick={onPrev}
             backgroundColor={colors.gray[100]}
@@ -146,6 +129,13 @@ const ListWrapper = styled.div`
   overflow-y: auto;
 `;
 
+const EmptyText = styled.p`
+  font-size: 14px;
+  color: ${colors.gray[500]};
+  text-align: center;
+  padding: 24px 0;
+`;
+
 const ApplicantRow = styled.div`
   display: flex;
   align-items: center;
@@ -161,8 +151,7 @@ const RadioCircle = styled.div<{ selected: boolean }>`
   border-radius: 50%;
   border: 2px solid
     ${({ selected }) => (selected ? colors.main[1] : colors.gray[100])};
-  background-color: ${({ selected }) =>
-    selected ? colors.main[1] : "transparent"};
+  background-color: ${({ selected }) => (selected ? colors.main[1] : "transparent")};
   display: flex;
   align-items: center;
   justify-content: center;

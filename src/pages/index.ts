@@ -3,3 +3,5 @@ export * from "./ViewDetailPage";
 export * from "./EditPage";
 export * from "./Mypage";
 export * from "./ProgressPage";
+export * from "./LoginPage";
+export * from "./OAuthCallbackPage";

@@ -1,38 +1,10 @@
 import { ProgressCard } from "../components";
 import { colors, Flex, Text } from "../styles/theme";
-
-const DUMMY_PROGRESS = [
-  {
-    id: 1,
-    title: "React가 알고 싶어요!",
-    status: "진행중",
-    major: "Frontend",
-    phone: "010-3000-2000",
-  },
-  {
-    id: 2,
-    title: "Next.js 멘토링 부탁드려요!",
-    status: "진행중",
-    major: "Frontend",
-    phone: "010-1234-5678",
-  },
-  {
-    id: 3,
-    title: "TypeScript 기초 도와주세요",
-    status: "진행중",
-    major: "Frontend",
-    phone: "010-9876-5432",
-  },
-  {
-    id: 4,
-    title: "알고리즘 스터디 같이해요",
-    status: "진행중",
-    major: "Frontend",
-    phone: "010-3000-2000",
-  },
-];
+import { useMentoringProgress } from "../hooks/useMe";
 
 export const ProgressPage = () => {
+  const { data, isLoading, isError } = useMentoringProgress();
+
   return (
     <Flex
       width="100%"
@@ -51,16 +23,26 @@ export const ProgressPage = () => {
         </Text>
       </Flex>
 
+      {isLoading && (
+        <Text fontSize={16} color={colors.gray[500]}>불러오는 중...</Text>
+      )}
+      {isError && (
+        <Text fontSize={16} color={colors.gray[500]}>진행 상황을 불러올 수 없습니다.</Text>
+      )}
+
       <Flex isColumn={true} width="100%" alignItems="flex-start">
-        {DUMMY_PROGRESS.map((progress) => (
+        {data?.items.map((progress) => (
           <ProgressCard
-            key={progress.id}
+            key={progress.post_id}
             title={progress.title}
             status={progress.status}
             major={progress.major}
-            phone={progress.phone}
+            mentor_contact={progress.mentor_contact}
           />
         ))}
+        {!isLoading && data?.items.length === 0 && (
+          <Text fontSize={16} color={colors.gray[500]}>진행 중인 멘토링이 없습니다.</Text>
+        )}
       </Flex>
     </Flex>
   );

@@ -8,3 +8,4 @@ export * from "./DeleteModal";
 export * from "./ParticModal";
 export * from "./ReviewCard";
 export * from "./ProgressCard";
+export * from "./LoginModal";

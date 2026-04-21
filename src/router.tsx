@@ -1,48 +1,52 @@
-import { createBrowserRouter } from "react-router-dom";
-import { RootLayout } from "./layouts";
+import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { RootLayout } from './layouts';
 import {
   EditPage,
   Mypage,
   ProgressPage,
   ViewAllPage,
   ViewDetailPage,
-} from "./pages";
-import { CreatePage } from "./pages/CreatePage";
-import { LandingPage } from "./pages/LandingPage";
+} from './pages';
+import { CreatePage } from './pages/CreatePage';
+import { LandingPage } from './pages/LandingPage';
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <LandingPage />,
   },
   {
-    path: "/main",
+    path: '/main',
     element: <RootLayout />,
     children: [
       {
-        path: "",
+        path: '',
         element: <ViewAllPage />,
       },
       {
-        path: "view/:id",
+        path: 'view/:id',
         element: <ViewDetailPage />,
       },
       {
-        path: "create",
+        path: 'create',
         element: <CreatePage />,
       },
       {
-        path: "edit/:id",
+        path: 'edit/:id',
         element: <EditPage />,
       },
       {
-        path: "my",
+        path: 'my',
         element: <Mypage />,
       },
       {
-        path: "progress",
+        path: 'progress',
         element: <ProgressPage />,
       },
     ],
+  },
+  {
+    path: '*',
+    element: <Navigate to="/" replace />,
   },
 ]);

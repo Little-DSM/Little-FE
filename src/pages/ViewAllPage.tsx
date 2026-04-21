@@ -1,64 +1,30 @@
-import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Post } from '../components/Post';
 import { colors, Flex, Text } from '../styles/theme';
-
-type PostType = {
-  title: string;
-  author: string;
-  date: string;
-  view: number;
-  imgUrl: string;
-  major: string;
-};
+import { usePosts } from '../hooks/usePosts';
 
 export const ViewAllPage = () => {
-  const [datas, _] = useState<PostType[]>([
-    {
-      title: 'ㅎㅇ요',
-      author: '박츄츄',
-      date: '2024-12-20',
-      view: 10000000,
-      imgUrl:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkJPKBtdZlkQMf3wB1nhKDThY_drt2UyZ_kg&s',
-      major: '프론트엔드',
-    },
-    {
-      title: 'ㅎㅇ요',
-      author: '박츄츄',
-      date: '2024-12-20',
-      view: 10000000,
-      imgUrl:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkJPKBtdZlkQMf3wB1nhKDThY_drt2UyZ_kg&s',
-      major: '프론트엔드',
-    },
-    {
-      title: 'ㅎㅇ요',
-      author: '박츄츄',
-      date: '2024-12-20',
-      view: 10000000,
-      imgUrl:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkJPKBtdZlkQMf3wB1nhKDThY_drt2UyZ_kg&s',
-      major: '프론트엔드',
-    },
-    {
-      title: 'ㅎㅇ요',
-      author: '박츄츄',
-      date: '2024-12-20',
-      view: 10000000,
-      imgUrl:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkJPKBtdZlkQMf3wB1nhKDThY_drt2UyZ_kg&s',
-      major: '프론트엔드',
-    },
-    {
-      title: 'ㅎㅇ요',
-      author: '박츄츄',
-      date: '2024-12-20',
-      view: 10000000,
-      imgUrl:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkJPKBtdZlkQMf3wB1nhKDThY_drt2UyZ_kg&s',
-      major: '프론트엔드',
-    },
-  ]);
+  const [searchParams] = useSearchParams();
+  const keyword = searchParams.get('keyword') ?? undefined;
+  const major = searchParams.get('major') ?? undefined;
+
+  const { data: posts, isLoading, isError } = usePosts({ keyword, major });
+
+  if (isLoading) {
+    return (
+      <Flex isColumn gap={24} width="100%">
+        <Text fontSize={16} color={colors.gray[600]}>불러오는 중...</Text>
+      </Flex>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Flex isColumn gap={24} width="100%">
+        <Text fontSize={16} color={colors.gray[600]}>게시글을 불러올 수 없습니다.</Text>
+      </Flex>
+    );
+  }
 
   return (
     <Flex isColumn gap={24} width="100%">
@@ -70,18 +36,22 @@ export const ViewAllPage = () => {
           오늘의 추천 멘토링
         </Text>
       </Flex>
-      <Flex gap={32} flexWrap="wrap" width="100%">
-        {datas.map((data) => (
-          <Post
-            title={data.title}
-            author={data.author}
-            date={data.date}
-            imgUrl={data.imgUrl}
-            view={data.view}
-            major={data.major}
-          />
-        ))}
-      </Flex>
+      {posts?.length === 0 ? (
+        <Text fontSize={16} color={colors.gray[500]}>게시글이 없습니다.</Text>
+      ) : (
+        <Flex gap={32} flexWrap="wrap" width="100%">
+          {posts?.map((post) => (
+            <Post
+              key={post.id}
+              id={post.id}
+              title={post.title}
+              date={post.created_at}
+              image_url={post.image_url}
+              major={post.major}
+            />
+          ))}
+        </Flex>
+      )}
     </Flex>
   );
 };
