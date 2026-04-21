@@ -6,6 +6,14 @@ import { colors, Flex } from '../styles/theme';
 import Button from '../components/Button';
 import { usePostDetail, useUpdatePost, useDeletePost } from '../hooks/usePosts';
 
+const readFileAsDataUrl = (file: File) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '');
+    reader.onerror = () => reject(new Error('이미지를 읽지 못했습니다.'));
+    reader.readAsDataURL(file);
+  });
+
 export const EditPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -21,6 +29,7 @@ export const EditPage = () => {
     description: '',
     imgFile: null as File | null,
     preview: null as string | null,
+    imageUrl: null as string | null,
   });
 
   useEffect(() => {
@@ -31,22 +40,29 @@ export const EditPage = () => {
         description: post.description,
         imgFile: null,
         preview: post.image_url,
+        imageUrl: post.image_url,
       });
     }
   }, [post]);
 
-  const handleAddImage = (file: File, preview: string) => {
-    setDatas((prev) => {
-      if (prev.preview && !prev.imgFile) return { ...prev, imgFile: file, preview };
-      if (prev.preview) URL.revokeObjectURL(prev.preview);
-      return { ...prev, imgFile: file, preview };
-    });
+  const handleAddImage = async (file: File, preview: string) => {
+    try {
+      const imageUrl = await readFileAsDataUrl(file);
+      setDatas((prev) => {
+        if (prev.preview && !prev.imgFile) return { ...prev, imgFile: file, preview, imageUrl };
+        if (prev.preview) URL.revokeObjectURL(prev.preview);
+        return { ...prev, imgFile: file, preview, imageUrl };
+      });
+    } catch {
+      URL.revokeObjectURL(preview);
+      alert('이미지를 불러오지 못했습니다.');
+    }
   };
 
   const handleDeleteImage = () => {
     setDatas((prev) => {
       if (prev.imgFile && prev.preview) URL.revokeObjectURL(prev.preview);
-      return { ...prev, imgFile: null, preview: null };
+      return { ...prev, imgFile: null, preview: null, imageUrl: null };
     });
   };
 
@@ -58,6 +74,7 @@ export const EditPage = () => {
         title: datas.title,
         description: datas.description,
         major: selectedMajor,
+        image_url: datas.imageUrl,
       },
       {
         onSuccess: () => navigate(`/main/view/${postId}`),

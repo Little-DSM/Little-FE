@@ -7,6 +7,14 @@ import { colors, Flex } from '../styles/theme';
 import Button from '../components/Button';
 import { useCreatePost } from '../hooks/usePosts';
 
+const readFileAsDataUrl = (file: File) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '');
+    reader.onerror = () => reject(new Error('이미지를 읽지 못했습니다.'));
+    reader.readAsDataURL(file);
+  });
+
 export const CreatePage = () => {
   const navigate = useNavigate();
   const [selectedMajor, setSelectedMajor] = useState<string>(major[0]);
@@ -15,21 +23,28 @@ export const CreatePage = () => {
     description: '',
     imgFile: null as File | null,
     preview: null as string | null,
+    imageUrl: null as string | null,
   });
 
   const { mutate: createPost, isPending } = useCreatePost();
 
-  const handleAddImage = (file: File, preview: string) => {
-    setDatas((prev) => {
-      if (prev.preview) URL.revokeObjectURL(prev.preview);
-      return { ...prev, imgFile: file, preview };
-    });
+  const handleAddImage = async (file: File, preview: string) => {
+    try {
+      const imageUrl = await readFileAsDataUrl(file);
+      setDatas((prev) => {
+        if (prev.preview) URL.revokeObjectURL(prev.preview);
+        return { ...prev, imgFile: file, preview, imageUrl };
+      });
+    } catch {
+      URL.revokeObjectURL(preview);
+      alert('이미지를 불러오지 못했습니다.');
+    }
   };
 
   const handleDeleteImage = () => {
     setDatas((prev) => {
       if (prev.preview) URL.revokeObjectURL(prev.preview);
-      return { ...prev, imgFile: null, preview: null };
+      return { ...prev, imgFile: null, preview: null, imageUrl: null };
     });
   };
 
@@ -42,6 +57,7 @@ export const CreatePage = () => {
         title: datas.title,
         description: datas.description,
         major: selectedMajor,
+        image_url: datas.imageUrl,
       },
       {
         onSuccess: (post) => navigate(`/main/view/${post.id}`),
