@@ -1,52 +1,59 @@
 import styled from '@emotion/styled';
 import { ImgAdd } from '../assets';
 import { colors } from '../styles/theme';
-import Input from './Input';
+import { useRef } from 'react';
 
 interface ImgSelectorProps {
-  imageUrl: string;
   preview: string | null;
-  onChangeUrl: (url: string) => void;
+  onAdd: (file: File, preview: string) => void;
   onDelete: () => void;
 }
 
-export const ImgSelector = ({ imageUrl, preview, onChangeUrl, onDelete }: ImgSelectorProps) => {
+export const ImgSelector = ({ preview, onAdd, onDelete }: ImgSelectorProps) => {
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleClick = () => {
+    fileRef.current?.click();
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const url = URL.createObjectURL(file);
+    onAdd(file, url);
+
+    e.target.value = '';
+  };
+
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDelete();
   };
 
   return (
-    <Container>
-      <Wrapper hasImage={!!preview}>
-        {preview ? (
-          <>
-            <Image src={preview} alt="preview" />
-            <DeleteButton type="button" onClick={handleDelete}>
-              ✕
-            </DeleteButton>
-          </>
-        ) : (
-          <ImgAdd />
-        )}
-      </Wrapper>
-      <Input
-        value={imageUrl}
-        onChange={(e) => onChangeUrl(e.target.value)}
-        label="이미지 URL"
-        placeholder="https://example.com/image.png"
-      />
-    </Container>
+    <Wrapper onClick={handleClick} hasImage={!!preview}>
+      {preview ? (
+        <>
+          <Image src={preview} alt="preview" />
+          <DeleteButton type="button" onClick={handleDelete}>
+            ✕
+          </DeleteButton>
+        </>
+      ) : (
+        <ImgAdd />
+      )}
+      <HiddenInput type="file" ref={fileRef} onChange={handleChange} />
+    </Wrapper>
   );
 };
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+const HiddenInput = styled.input`
+  display: none;
 `;
 
 const Wrapper = styled.div<{ hasImage: boolean }>`
+  cursor: pointer;
   width: 282px;
   height: 202px;
   border-radius: 20px;

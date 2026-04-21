@@ -19,7 +19,8 @@ export const EditPage = () => {
   const [datas, setDatas] = useState({
     title: '',
     description: '',
-    imageUrl: '',
+    imgFile: null as File | null,
+    preview: null as string | null,
   });
 
   useEffect(() => {
@@ -28,16 +29,26 @@ export const EditPage = () => {
       setDatas({
         title: post.title,
         description: post.description,
-        imageUrl: post.image_url ?? '',
+        imgFile: null,
+        preview: post.image_url,
       });
     }
   }, [post]);
 
-  const handleDeleteImage = () => {
-    setDatas((prev) => ({ ...prev, imageUrl: '' }));
+  const handleAddImage = (file: File, preview: string) => {
+    setDatas((prev) => {
+      if (prev.preview && !prev.imgFile) return { ...prev, imgFile: file, preview };
+      if (prev.preview) URL.revokeObjectURL(prev.preview);
+      return { ...prev, imgFile: file, preview };
+    });
   };
 
-  const preview = datas.imageUrl.trim() || null;
+  const handleDeleteImage = () => {
+    setDatas((prev) => {
+      if (prev.imgFile && prev.preview) URL.revokeObjectURL(prev.preview);
+      return { ...prev, imgFile: null, preview: null };
+    });
+  };
 
   const handleSubmit = () => {
     if (!datas.title.trim()) return alert('제목을 입력해주세요.');
@@ -47,7 +58,6 @@ export const EditPage = () => {
         title: datas.title,
         description: datas.description,
         major: selectedMajor,
-        image_url: datas.imageUrl.trim() || null,
       },
       {
         onSuccess: () => navigate(`/main/view/${postId}`),
@@ -70,9 +80,8 @@ export const EditPage = () => {
     <Flex width="100%" gap={24}>
       <Flex width="100%" isColumn gap={40}>
         <ImgSelector
-          imageUrl={datas.imageUrl}
-          preview={preview}
-          onChangeUrl={(imageUrl) => setDatas((prev) => ({ ...prev, imageUrl }))}
+          preview={datas.preview}
+          onAdd={handleAddImage}
           onDelete={handleDeleteImage}
         />
         <Input
