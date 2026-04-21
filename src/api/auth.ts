@@ -10,9 +10,13 @@ export const refreshTokenApi = (refresh_token: string) =>
 export const logoutApi = (refresh_token: string) =>
   apiClient.post('/auth/logout', { refresh_token });
 
-export const getGoogleLoginUrl = () =>
+export const getGoogleLoginUrl = (frontendRedirectUri?: string) =>
   apiClient
-    .get<{ authorization_url: string; state: string }>('/auth/google/login')
+    .get<{ authorization_url: string; state: string }>('/auth/google/login', {
+      params: frontendRedirectUri
+        ? { frontend_redirect_uri: frontendRedirectUri }
+        : undefined,
+    })
     .then((r) => r.data);
 
 export const googleCallbackApi = (code: string, state: string) =>

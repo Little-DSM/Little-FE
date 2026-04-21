@@ -1,12 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { colors, Flex } from '../styles/theme';
 import { HeaderLogo, HomePageImg, MypageImg, WritePageImg } from '../assets';
 import { motion } from 'framer-motion';
 import { LoginModal } from '../components/LoginModal';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export const LandingPage = () => {
   const [loginOpen, setLoginOpen] = useState(false);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('access_token');
+    if (!accessToken) return;
+
+    const keyword = searchParams.get('keyword');
+    navigate(keyword ? `/main?keyword=${encodeURIComponent(keyword)}` : '/main', {
+      replace: true,
+    });
+  }, [navigate, searchParams]);
 
   return (
     <Wrapper>

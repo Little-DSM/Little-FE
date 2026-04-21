@@ -19,7 +19,8 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
     setIsLoading(true);
     setError('');
     try {
-      const { authorization_url } = await getGoogleLoginUrl();
+      const frontendRedirectUri = `${window.location.origin}/main`;
+      const { authorization_url } = await getGoogleLoginUrl(frontendRedirectUri);
       window.location.href = authorization_url;
     } catch {
       setError('Google 로그인 URL을 가져오지 못했습니다. 잠시 후 다시 시도해주세요.');
