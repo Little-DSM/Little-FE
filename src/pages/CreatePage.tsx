@@ -13,32 +13,30 @@ export const CreatePage = () => {
   const [datas, setDatas] = useState({
     title: '',
     description: '',
-    imgFile: null as File | null,
-    preview: null as string | null,
+    imageUrl: '',
   });
 
   const { mutate: createPost, isPending } = useCreatePost();
 
-  const handleAddImage = (file: File, preview: string) => {
-    setDatas((prev) => {
-      if (prev.preview) URL.revokeObjectURL(prev.preview);
-      return { ...prev, imgFile: file, preview };
-    });
+  const handleDeleteImage = () => {
+    setDatas((prev) => ({ ...prev, imageUrl: '' }));
   };
 
-  const handleDeleteImage = () => {
-    setDatas((prev) => {
-      if (prev.preview) URL.revokeObjectURL(prev.preview);
-      return { ...prev, imgFile: null, preview: null };
-    });
-  };
+  const preview = datas.imageUrl.trim() || null;
 
   const handleSubmit = () => {
     if (!datas.title.trim()) return alert('제목을 입력해주세요.');
     if (!datas.description.trim()) return alert('멘토링 내용을 입력해주세요.');
 
+    const imageUrl = datas.imageUrl.trim();
+
     createPost(
-      { title: datas.title, description: datas.description, major: selectedMajor },
+      {
+        title: datas.title,
+        description: datas.description,
+        major: selectedMajor,
+        image_url: imageUrl || null,
+      },
       {
         onSuccess: (post) => navigate(`/main/view/${post.id}`),
         onError: (err: any) => alert(err?.response?.data?.detail ?? '게시 실패'),
@@ -50,8 +48,9 @@ export const CreatePage = () => {
     <Flex width="100%" gap={24}>
       <Flex width="100%" isColumn gap={40}>
         <ImgSelector
-          preview={datas.preview}
-          onAdd={handleAddImage}
+          imageUrl={datas.imageUrl}
+          preview={preview}
+          onChangeUrl={(imageUrl) => setDatas((prev) => ({ ...prev, imageUrl }))}
           onDelete={handleDeleteImage}
         />
         <Input

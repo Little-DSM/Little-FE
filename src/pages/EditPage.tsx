@@ -19,8 +19,7 @@ export const EditPage = () => {
   const [datas, setDatas] = useState({
     title: '',
     description: '',
-    imgFile: null as File | null,
-    preview: null as string | null,
+    imageUrl: '',
   });
 
   useEffect(() => {
@@ -29,32 +28,27 @@ export const EditPage = () => {
       setDatas({
         title: post.title,
         description: post.description,
-        imgFile: null,
-        preview: post.image_url,
+        imageUrl: post.image_url ?? '',
       });
     }
   }, [post]);
 
-  const handleAddImage = (file: File, preview: string) => {
-    setDatas((prev) => {
-      if (prev.preview && !prev.imgFile) return { ...prev, imgFile: file, preview };
-      if (prev.preview) URL.revokeObjectURL(prev.preview);
-      return { ...prev, imgFile: file, preview };
-    });
+  const handleDeleteImage = () => {
+    setDatas((prev) => ({ ...prev, imageUrl: '' }));
   };
 
-  const handleDeleteImage = () => {
-    setDatas((prev) => {
-      if (prev.imgFile && prev.preview) URL.revokeObjectURL(prev.preview);
-      return { ...prev, imgFile: null, preview: null };
-    });
-  };
+  const preview = datas.imageUrl.trim() || null;
 
   const handleSubmit = () => {
     if (!datas.title.trim()) return alert('제목을 입력해주세요.');
 
     updatePost(
-      { title: datas.title, description: datas.description, major: selectedMajor },
+      {
+        title: datas.title,
+        description: datas.description,
+        major: selectedMajor,
+        image_url: datas.imageUrl.trim() || null,
+      },
       {
         onSuccess: () => navigate(`/main/view/${postId}`),
         onError: (err: any) => alert(err?.response?.data?.detail ?? '수정 실패'),
@@ -76,8 +70,9 @@ export const EditPage = () => {
     <Flex width="100%" gap={24}>
       <Flex width="100%" isColumn gap={40}>
         <ImgSelector
-          preview={datas.preview}
-          onAdd={handleAddImage}
+          imageUrl={datas.imageUrl}
+          preview={preview}
+          onChangeUrl={(imageUrl) => setDatas((prev) => ({ ...prev, imageUrl }))}
           onDelete={handleDeleteImage}
         />
         <Input

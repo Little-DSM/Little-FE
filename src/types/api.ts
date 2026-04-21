@@ -5,13 +5,13 @@ export interface AuthTokenPairResponse {
 }
 
 export interface MyPageResponse {
-  email: string;
+  email: string | null;
   id: number;
-  introduction: string;
+  introduction: string | null;
   major: string;
   name: string;
   profile_image: string | null;
-  rating_average: number;
+  rating_average: number | null;
   rating_count: number;
 }
 
@@ -64,14 +64,14 @@ export interface MentoringPostListItem {
 
 export interface MentoringPostCreate {
   description: string;
-  image_url?: string;
+  image_url?: string | null;
   major: string;
   title: string;
 }
 
 export interface MentoringPostUpdate {
   description?: string;
-  image_url?: string;
+  image_url?: string | null;
   major?: string;
   title?: string;
 }
@@ -143,7 +143,7 @@ export interface RatingDistribution {
 }
 
 export interface MentorReviewSummaryResponse {
-  average_rating: number;
+  average_rating: number | null;
   distribution: RatingDistribution;
   mentor_id: number;
   reviews: MentorReviewItem[];

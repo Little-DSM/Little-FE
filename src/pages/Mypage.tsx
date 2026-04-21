@@ -11,9 +11,10 @@ import { useMentorReviews } from "../hooks/useMentors";
 import { usePosts } from "../hooks/usePosts";
 
 export const Mypage = () => {
-  const { data: me, isLoading: meLoading } = useMe();
+  const { data: me, isLoading: meLoading, isError: meError } = useMe();
   const { data: reviewData } = useMentorReviews(me?.id);
   const { data: posts } = usePosts();
+  const displayRating = reviewData?.average_rating ?? me?.rating_average;
 
   const distribution = reviewData?.distribution;
   const ratingData = distribution
@@ -29,6 +30,10 @@ export const Mypage = () => {
 
   if (meLoading) {
     return <Text fontSize={16} color={colors.gray[600]}>불러오는 중...</Text>;
+  }
+
+  if (meError || !me) {
+    return <Text fontSize={16} color={colors.gray[600]}>마이페이지 정보를 불러오지 못했습니다.</Text>;
   }
 
   return (
@@ -47,12 +52,12 @@ export const Mypage = () => {
 
           <Flex isColumn={true} gap={12}>
             <Text fontSize={24} fontWeight={600}>
-              {me?.name ?? "-"}
+              {me.name}
             </Text>
             <Text fontSize={20} fontWeight={400} color={`${colors.gray[500]}`}>
-              {me?.introduction ?? ""}
+              {me.introduction ?? ""}
             </Text>
-            {me?.major && (
+            {me.major && (
               <Flex gap={10}>
                 <MajorTag major={me.major} variant="dark" />
               </Flex>
@@ -85,11 +90,11 @@ export const Mypage = () => {
             <Flex gap={8} alignItems="center">
               <img src={bigStar} alt="star" width={32} height={32} />
               <Text fontSize={28} fontWeight={700} color={colors.gray[1000]}>
-                {reviewData?.average_rating.toFixed(1) ?? me?.rating_average.toFixed(1) ?? "-"}
+                {displayRating != null ? displayRating.toFixed(1) : "-"}
               </Text>
             </Flex>
             <Text fontSize={20} fontWeight={400} color={colors.gray[300]}>
-              총 {reviewData?.total_reviews ?? me?.rating_count ?? 0}건
+              총 {reviewData?.total_reviews ?? me.rating_count ?? 0}건
             </Text>
           </Flex>
           {ratingData.length > 0 && (
