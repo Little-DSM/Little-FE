@@ -4,7 +4,7 @@ const style = css`
   @font-face {
     font-family: 'Pretendard';
     font-weight: 100 900;
-    src: url('../../../public/PretendardVariable.ttf') format('woff2');
+    src: url('/PretendardVariable.ttf') format('truetype');
   }
 
   * {
