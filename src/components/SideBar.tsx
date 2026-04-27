@@ -12,7 +12,7 @@ import {
   ProgressIconActive,
   MypageIcon,
   MypageIconActive,
-  SettingIcon,
+  LogoutIcon,
 } from "../assets";
 import { MajorTag } from "./MajorTag";
 import { useAuth } from "../context/AuthContext";
@@ -117,7 +117,7 @@ export const SideBar = () => {
         style={{ padding: "0 24px" }}
       >
         <img
-          src={SettingIcon}
+          src={LogoutIcon}
           alt="로그아웃"
           width={32}
           height={32}
