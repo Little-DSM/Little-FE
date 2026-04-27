@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Flex, Text, colors } from "../styles/theme";
 import { MajorTag } from "./MajorTag";
-import defaultImg from "../assets/partic_icon.svg";
+import defaultImg from "../assets/default_img.png";
 
 interface PostProps {
   id: number;

@@ -7,7 +7,7 @@ import styled from '@emotion/styled';
 import Button from '../components/Button';
 import { usePostDetail, useApplyAsMentor } from '../hooks/usePosts';
 import { useAuth } from '../context/AuthContext';
-import defaultImg from '../assets/partic_icon.svg';
+import defaultImg from '../assets/default_img.png';
 
 export const ViewDetailPage = () => {
   const { id } = useParams<{ id: string }>();
