@@ -6,6 +6,7 @@ import {
   Mypage,
   MypageUpdate,
   ProgressPage,
+  ReviewPage,
   ViewAllPage,
   ViewDetailPage,
 } from './pages';
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
       {
         path: 'mentor/:id',
         element: <MentorPage />,
+      },
+      {
+        path: 'review/:post_id',
+        element: <ReviewPage />,
       },
       {
         path: 'progress',

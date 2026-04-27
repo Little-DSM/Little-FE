@@ -41,6 +41,11 @@ export const ProgressPage = () => {
             mentor_contact={progress.mentor_contact}
             post_id={progress.post_id}
             onClick={() => navigate(`/main/view/${progress.post_id}`)}
+            onComplete={() =>
+              navigate(`/main/review/${progress.post_id}`, {
+                state: { mentor_name: progress.mentor_name },
+              })
+            }
           />
         ))}
         {!isLoading && data?.items.length === 0 && (

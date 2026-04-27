@@ -10,6 +10,8 @@ export { default as ProgressIcon } from "./progress.svg";
 export { default as ProgressIconActive } from "./progress_active.svg";
 export { default as ProfileIcon } from "./profile.svg";
 export { default as DefaultProfileIcon } from "./default_profile.png";
+export { default as BlueStar } from "./blue_star.svg";
+export { default as GrayStar } from "./gray_star.svg";
 export { default as PencilIcon } from "./pencil.svg";
 export { default as HomePageImg } from "./HomePageImg.png";
 export { default as MypageImg } from "./MypageImg.png";

@@ -4,6 +4,7 @@ export * from "./EditPage";
 export * from "./Mypage";
 export * from "./MypageUpdate";
 export * from "./MentorPage";
+export * from "./ReviewPage";
 export * from "./ProgressPage";
 export * from "./LoginPage";
 export * from "./OAuthCallbackPage";
