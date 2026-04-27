@@ -1,14 +1,15 @@
 import { ProgressCard } from "../components";
 import { colors, Flex, Text } from "../styles/theme";
 import { useMentoringProgress } from "../hooks/useMe";
+import { useNavigate } from "react-router-dom";
 
 export const ProgressPage = () => {
+  const navigate = useNavigate();
   const { data, isLoading, isError } = useMentoringProgress();
 
   return (
     <Flex
       width="100%"
-      height="80vh"
       paddingTop="40px"
       paddingLeft="80px"
       gap={24}
@@ -38,6 +39,8 @@ export const ProgressPage = () => {
             status={progress.status}
             major={progress.major}
             mentor_contact={progress.mentor_contact}
+            post_id={progress.post_id}
+            onClick={() => navigate(`/main/view/${progress.post_id}`)}
           />
         ))}
         {!isLoading && data?.items.length === 0 && (

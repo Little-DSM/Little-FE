@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { useLocation, useNavigate } from "react-router-dom";
 import { colors, Flex, Text } from "../styles/theme";
 import {
-  ProfileIcon,
+  DefaultProfileIcon,
   PencilIcon,
   FindIcon,
   FindIconActive,
@@ -65,8 +65,9 @@ export const SideBar = () => {
         <Flex width="100%" gap={32} alignItems="center" justifyContent="center">
           <Profile>
             <ProfileImgEl
-              src={user?.profile_image ?? ProfileIcon}
+              src={user?.profile_image ?? DefaultProfileIcon}
               alt="프로필"
+              onError={(e) => { e.currentTarget.src = DefaultProfileIcon; }}
             />
             <UpdateButton onClick={() => navigate("/main/my")}>
               <img src={PencilIcon} alt="프로필 수정" />

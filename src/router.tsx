@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { RootLayout } from './layouts';
 import {
   EditPage,
+  MentorPage,
   Mypage,
   MypageUpdate,
   ProgressPage,
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
       {
         path: 'my/edit',
         element: <MypageUpdate />,
+      },
+      {
+        path: 'mentor/:id',
+        element: <MentorPage />,
       },
       {
         path: 'progress',

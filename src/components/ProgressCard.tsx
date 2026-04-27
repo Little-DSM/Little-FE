@@ -13,6 +13,8 @@ interface ProgressProps {
   status: string;
   major: string;
   mentor_contact: string;
+  post_id: number;
+  onClick?: () => void;
   onComplete?: () => void;
 }
 
@@ -21,6 +23,7 @@ export const ProgressCard = ({
   status,
   major,
   mentor_contact,
+  onClick,
   onComplete,
 }: ProgressProps) => {
   return (
@@ -32,6 +35,8 @@ export const ProgressCard = ({
       paddingLeft="24px"
       paddingRight="24px"
       borderBottom={`1px solid ${colors.gray[100]}`}
+      onClick={onClick}
+      style={{ cursor: "pointer" }}
     >
       <Flex isColumn={true} gap={16}>
         <Flex gap={12} alignItems="center">
@@ -55,7 +60,7 @@ export const ProgressCard = ({
       </Flex>
 
       <Button
-        onClick={onComplete}
+        onClick={(e) => { e?.stopPropagation(); onComplete?.(); }}
         backgroundColor={status === "COMPLETED" ? colors.gray[100] : undefined}
         color={status === "COMPLETED" ? colors.gray[500] : undefined}
       >

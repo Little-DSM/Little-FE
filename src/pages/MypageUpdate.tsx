@@ -7,7 +7,7 @@ import Input from '../components/Input';
 import { TextArea } from '../components/TextArea';
 import Button from '../components/Button';
 import MajorButton from '../components/MajorButton';
-import { ProfileIcon, PencilIcon } from '../assets';
+import { DefaultProfileIcon, PencilIcon } from '../assets';
 
 const MAJORS = [
   'Frontend', 'Backend', 'iOS', 'Android',
@@ -92,9 +92,9 @@ export const MypageUpdate = () => {
       <Flex width="100%" isColumn gap={60} alignItems="center">
         <Profile>
           <ProfileImg
-            src={previewImage ?? ProfileIcon}
+            src={previewImage ?? DefaultProfileIcon}
             alt="프로필"
-            onError={(e) => { e.currentTarget.src = ProfileIcon; }}
+            onError={(e) => { e.currentTarget.src = DefaultProfileIcon; }}
           />
           <EditButton onClick={() => fileInputRef.current?.click()}>
             <img src={PencilIcon} alt="프로필 수정" width={16} height={16} />

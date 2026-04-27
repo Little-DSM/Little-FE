@@ -3,7 +3,7 @@ import { colors } from '../styles/theme';
 
 interface ButtonType {
   children: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
   backgroundColor?: string;
   color?: string;
   width?: string;

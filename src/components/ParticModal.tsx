@@ -2,9 +2,10 @@ import { useState } from "react";
 import styled from "@emotion/styled";
 import { colors } from "../styles/theme";
 import Button from "./Button";
-import particIcon from "../assets/partic_icon.svg";
+import { DefaultProfileIcon } from "../assets";
 import arrowRight from "../assets/arrow_right.svg";
 import { useApplications, useSelectMentor } from "../hooks/usePosts";
+import { useNavigate } from "react-router-dom";
 
 interface ParticModalProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ export const ParticModal = ({ isOpen, postId, onClose, onPrev }: ParticModalProp
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const { data, isLoading } = useApplications(postId, isOpen);
   const { mutate: selectMentor, isPending } = useSelectMentor(postId);
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
@@ -39,22 +41,22 @@ export const ParticModal = ({ isOpen, postId, onClose, onPrev }: ParticModalProp
             <EmptyText>지원자가 없습니다.</EmptyText>
           )}
           {data?.mentors.map((applicant) => (
-            <ApplicantRow
-              key={applicant.id}
-              onClick={() =>
-                setSelectedId((prev) => (prev === applicant.id ? null : applicant.id))
-              }
-            >
-              <RadioCircle selected={selectedId === applicant.id}>
+            <ApplicantRow key={applicant.id}>
+              <RadioCircle
+                selected={selectedId === applicant.id}
+                onClick={() =>
+                  setSelectedId((prev) => (prev === applicant.id ? null : applicant.id))
+                }
+              >
                 {selectedId === applicant.id && <CheckMark>✓</CheckMark>}
               </RadioCircle>
-              <InfoBox>
+              <InfoBox onClick={() => { onClose(); navigate(`/main/mentor/${applicant.id}`); }}>
                 <ProfileAvatar>
-                  {applicant.profile_image ? (
-                    <ProfileImg src={applicant.profile_image} alt={applicant.name} />
-                  ) : (
-                    <DefaultIcon src={particIcon} alt="default profile" />
-                  )}
+                  <ProfileImg
+                    src={applicant.profile_image ?? DefaultProfileIcon}
+                    alt={applicant.name}
+                    onError={(e) => { e.currentTarget.src = DefaultProfileIcon; }}
+                  />
                 </ProfileAvatar>
                 <NameText>{applicant.name}</NameText>
                 <img
@@ -142,7 +144,6 @@ const ApplicantRow = styled.div`
   height: 68px;
   width: 100%;
   gap: 16px;
-  cursor: pointer;
 `;
 
 const RadioCircle = styled.div<{ selected: boolean }>`
@@ -172,6 +173,8 @@ const InfoBox = styled.div`
   height: 100%;
   padding: 0 12px;
   gap: 8px;
+  cursor: pointer;
+  &:hover { background-color: ${colors.gray[50]}; border-radius: 8px; }
 `;
 
 const ProfileAvatar = styled.div`
@@ -192,10 +195,6 @@ const ProfileImg = styled.img`
   object-fit: cover;
 `;
 
-const DefaultIcon = styled.img`
-  width: 20px;
-  height: 20px;
-`;
 
 const NameText = styled.span`
   font-size: 16px;
