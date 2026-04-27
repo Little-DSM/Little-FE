@@ -33,6 +33,7 @@ const FooterWrapper = styled.footer`
   padding: 24px 28px;
   width: 100%;
   background-color: #f8f8f8;
+  margin-top: auto;
 `;
 
 const ContentWrapper = styled.div`

@@ -1,17 +1,18 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ImgSelector, MajorSelector, TextArea } from '../components';
-import Input from '../components/Input';
-import { major } from '../types';
-import { colors, Flex } from '../styles/theme';
-import Button from '../components/Button';
-import { useCreatePost } from '../hooks/usePosts';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ImgSelector, MajorSelector, TextArea } from "../components";
+import Input from "../components/Input";
+import { major } from "../types";
+import { colors, Flex } from "../styles/theme";
+import Button from "../components/Button";
+import { useCreatePost } from "../hooks/usePosts";
 
 const readFileAsDataUrl = (file: File) =>
   new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '');
-    reader.onerror = () => reject(new Error('이미지를 읽지 못했습니다.'));
+    reader.onload = () =>
+      resolve(typeof reader.result === "string" ? reader.result : "");
+    reader.onerror = () => reject(new Error("이미지를 읽지 못했습니다."));
     reader.readAsDataURL(file);
   });
 
@@ -19,8 +20,8 @@ export const CreatePage = () => {
   const navigate = useNavigate();
   const [selectedMajor, setSelectedMajor] = useState<string>(major[0]);
   const [datas, setDatas] = useState({
-    title: '',
-    description: '',
+    title: "",
+    description: "",
     imgFile: null as File | null,
     preview: null as string | null,
     imageUrl: null as string | null,
@@ -37,7 +38,7 @@ export const CreatePage = () => {
       });
     } catch {
       URL.revokeObjectURL(preview);
-      alert('이미지를 불러오지 못했습니다.');
+      alert("이미지를 불러오지 못했습니다.");
     }
   };
 
@@ -49,8 +50,8 @@ export const CreatePage = () => {
   };
 
   const handleSubmit = () => {
-    if (!datas.title.trim()) return alert('제목을 입력해주세요.');
-    if (!datas.description.trim()) return alert('멘토링 내용을 입력해주세요.');
+    if (!datas.title.trim()) return alert("제목을 입력해주세요.");
+    if (!datas.description.trim()) return alert("멘토링 내용을 입력해주세요.");
 
     createPost(
       {
@@ -61,13 +62,14 @@ export const CreatePage = () => {
       },
       {
         onSuccess: (post) => navigate(`/main/view/${post.id}`),
-        onError: (err: any) => alert(err?.response?.data?.detail ?? '게시 실패'),
+        onError: (err: any) =>
+          alert(err?.response?.data?.detail ?? "게시 실패"),
       },
     );
   };
 
   return (
-    <Flex width="100%" gap={24}>
+    <Flex width="100%" gap={24} paddingBottom="80px" paddingTop="40px">
       <Flex width="100%" isColumn gap={40}>
         <ImgSelector
           preview={datas.preview}
@@ -75,14 +77,21 @@ export const CreatePage = () => {
           onDelete={handleDeleteImage}
         />
         <Input
-          onChange={(e) => setDatas((prev) => ({ ...prev, title: e.target.value }))}
+          onChange={(e) =>
+            setDatas((prev) => ({ ...prev, title: e.target.value }))
+          }
           value={datas.title}
           label="제목"
           placeholder="제목을 입력하세요.."
         />
-        <MajorSelector setSelectedMajor={setSelectedMajor} selectedMajor={selectedMajor} />
+        <MajorSelector
+          setSelectedMajor={setSelectedMajor}
+          selectedMajor={selectedMajor}
+        />
         <TextArea
-          onChange={(e) => setDatas((prev) => ({ ...prev, description: e.target.value }))}
+          onChange={(e) =>
+            setDatas((prev) => ({ ...prev, description: e.target.value }))
+          }
           value={datas.description}
           placeholder="설명을 입력하세요.."
           label="멘토링 내용"
@@ -91,7 +100,7 @@ export const CreatePage = () => {
       <Flex style={{ flexShrink: 0 }} gap={12} alignItems="center">
         <Flex gap={8}>
           <Button onClick={handleSubmit} disabled={isPending}>
-            {isPending ? '게시 중...' : '게시'}
+            {isPending ? "게시 중..." : "게시"}
           </Button>
           <Button
             onClick={() => navigate(-1)}
