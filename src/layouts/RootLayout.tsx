@@ -89,7 +89,7 @@ const ContentWrapper = styled.div`
   width: calc(100vw - 320px);
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  min-height: 100vh;
 `;
 
 const Header = styled.header`
@@ -121,6 +121,7 @@ const SearchWrapper = styled.div`
 const Main = styled.main`
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: 44px;
   padding: 28px;
   margin-top: 64px;
