@@ -100,7 +100,10 @@ export const useSelectMentor = (post_id: number) => {
   });
 };
 
-export const useCreateReview = (post_id: number) =>
-  useMutation({
+export const useCreateReview = (post_id: number) => {
+  const qc = useQueryClient();
+  return useMutation({
     mutationFn: (body: ReviewCreateRequest) => createReview(post_id, body),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['me', 'progress'] }),
   });
+};
