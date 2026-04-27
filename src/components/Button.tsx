@@ -7,6 +7,7 @@ interface ButtonType {
   backgroundColor?: string;
   color?: string;
   width?: string;
+  disabled?: boolean;
 }
 
 const Button = ({
@@ -15,6 +16,7 @@ const Button = ({
   color = colors.gray[50],
   backgroundColor = colors.main[1],
   width,
+  disabled,
 }: ButtonType) => {
   return (
     <StyledButton
@@ -22,6 +24,7 @@ const Button = ({
       color={color}
       backgroundColor={backgroundColor}
       width={width}
+      disabled={disabled}
     >
       {children}
     </StyledButton>
@@ -33,7 +36,8 @@ const StyledButton = styled.button<Omit<ButtonType, 'onClick' | 'children'>>`
   font-size: 16px;
   border-radius: 12px;
   font-weight: 500;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
   width: ${({ width }) => width ?? width};
 
   color: ${({ color }) => color};

@@ -15,6 +15,8 @@ import {
   SettingIcon,
 } from "../assets";
 import { MajorTag } from "./MajorTag";
+import { useAuth } from "../context/AuthContext";
+import { logoutApi } from "../api/auth";
 
 const NAV_ITEMS = [
   {
@@ -46,14 +48,27 @@ const NAV_ITEMS = [
 export const SideBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
+  const handleLogout = async () => {
+    const refreshToken = localStorage.getItem("refresh_token");
+    if (refreshToken) {
+      await logoutApi(refreshToken).catch(() => {});
+    }
+    logout();
+    navigate("/");
+  };
 
   return (
     <SidebarWrapper>
       <Flex width="100%" isColumn={true} gap={36} alignItems="center">
         <Flex width="100%" gap={32} alignItems="center" justifyContent="center">
           <Profile>
-            <img src={ProfileIcon} alt="프로필" />
-            <UpdateButton>
+            <ProfileImgEl
+              src={user?.profile_image ?? ProfileIcon}
+              alt="프로필"
+            />
+            <UpdateButton onClick={() => navigate("/main/my")}>
               <img src={PencilIcon} alt="프로필 수정" />
             </UpdateButton>
           </Profile>
@@ -61,13 +76,13 @@ export const SideBar = () => {
           <Flex isColumn={true} gap={8}>
             <Flex gap={8} alignItems="flex-start">
               <Text fontSize={24} fontWeight={600}>
-                {"오찬영"}
+                {user?.name ?? "-"}
               </Text>
-              <MajorTag major="Game" />
+              {user?.major && <MajorTag major={user.major} />}
             </Flex>
 
             <Text fontSize={16} fontWeight={400} color={`${colors.gray[500]}`}>
-              {"ohhchan@gmail.com"}
+              {user?.email ?? ""}
             </Text>
           </Flex>
         </Flex>
@@ -103,10 +118,12 @@ export const SideBar = () => {
       >
         <img
           src={SettingIcon}
-          alt="설정"
+          alt="로그아웃"
           width={32}
           height={32}
           style={{ cursor: "pointer" }}
+          title="로그아웃"
+          onClick={handleLogout}
         />
       </Flex>
     </SidebarWrapper>
@@ -137,6 +154,14 @@ const Profile = styled.div`
   border-radius: 100%;
   position: relative;
 `;
+
+const ProfileImgEl = styled.img`
+  width: 68px;
+  height: 68px;
+  border-radius: 100%;
+  object-fit: cover;
+`;
+
 const UpdateButton = styled.button`
   width: 16px;
   height: 16px;

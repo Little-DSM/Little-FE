@@ -1,60 +1,99 @@
 import { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { MajorTag } from '../components/MajorTag';
+import { ParticModal } from '../components/ParticModal';
 import { colors, Flex, Text } from '../styles/theme';
 import styled from '@emotion/styled';
 import Button from '../components/Button';
+import { usePostDetail, useApplyAsMentor } from '../hooks/usePosts';
+import { useAuth } from '../context/AuthContext';
+import defaultImg from '../assets/partic_icon.svg';
 
 export const ViewDetailPage = () => {
-  const [datas, setDatas] = useState<{
-    title: string;
-    author: string;
-    date: string;
-    major: string[];
-    content: string;
-    imgUrl: string;
-  }>({
-    title: '난 박츄츄야 난 귀여웡!!',
-    author: '박츄츄',
-    date: '2024-10-10',
-    major: ['강아지', '박츄츄'],
-    content:
-      '박츄츄는 작은 몸에 커다란 존재감을 가진 시츄다. 복슬복슬한 털과 동그란 눈, 그리고 살짝 들린 코끝까지—어느 하나 귀엽지 않은 구석이 없다. 가만히 앉아만 있어도 인형 같고, 꼬리를 살랑살랑 흔들며 다가오면 하루의 피로가 순식간에 사라진다. 박츄츄의 하루는 단순하지만 사랑스럽다. 아침에는 느릿느릿 기지개를 켜며 하루를 시작하고, 밥을 먹을 때는 세상 누구보다 진지한 표정을 짓는다. 산책을 나가면 작은 발로 총총 걸으며 세상을 탐험하는데, 낯선 소리에도 귀를 쫑긋 세우는 모습이 마치 호기심 많은 탐험가 같다. 특히 박츄츄의 매력은 사람을 바라보는 눈빛에 있다. 말은 하지 않아도 “같이 놀자”, “지금 행복해” 같은 감정을 그대로 전해준다. 가끔은 괜히 옆에 와서 기대 앉거나, 아무 이유 없이 바라보며 꼬리를 흔드는데, 그 순간만큼은 세상에서 가장 따뜻한 존재가 된다. 작고 귀여운 시츄 박츄츄는 단순한 반려견이 아니라, 하루를 더 행복하게 만들어주는 소중한 친구다. 존재만으로도 웃음을 주는, 그런 특별한 존재다.',
-    imgUrl:
-      'https://mblogthumb-phinf.pstatic.net/MjAyNDAxMjVfMTUx/MDAxNzA2MTgyNzUzMjI0.4zCsBpH3SR6bsxhVvWRmkcyMrsMJuO71yaFarXl1yYsg.APjgu1CsafB84QfDdfuMqYzGFfzfLlvTwvDzcu2LgH0g.JPEG.jy841018/1706182750990.jpg?type=w800',
-  });
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const postId = Number(id);
+  const { user } = useAuth();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data, isLoading, isError } = usePostDetail(postId);
+  const { mutate: apply, isPending: isApplying } = useApplyAsMentor(postId);
+
+  if (isLoading) {
+    return <Text fontSize={16} color={colors.gray[600]}>불러오는 중...</Text>;
+  }
+
+  if (isError || !data) {
+    return <Text fontSize={16} color={colors.gray[600]}>게시글을 찾을 수 없습니다.</Text>;
+  }
+
+  const isAuthor = user?.id === data.author.id;
+  const formattedDate = data.created_at.split('T')[0];
+
+  const handleApply = () => {
+    apply(undefined, {
+      onSuccess: () => alert('지원이 완료되었습니다!'),
+      onError: (err: any) => alert(err?.response?.data?.detail ?? '지원에 실패했습니다.'),
+    });
+  };
+
   return (
-    <Flex isColumn gap={60} width="100%">
-      <Flex justifyContent="space-between" width="100%">
-        <Flex gap={40}>
-          <Img src={datas.imgUrl} alt={datas.title}></Img>
-          <Flex isColumn gap={20}>
-            <Text fontWeight={600} fontSize={24}>
-              {datas.title}
-            </Text>
-            <Flex gap={12} alignItems="center">
-              <Text fontSize={16}>{datas.author}</Text>
-              <Text fontSize={16} color={colors.gray[500]}>
-                {datas.date}
+    <>
+      <Flex isColumn gap={60} width="100%">
+        <Flex justifyContent="space-between" width="100%">
+          <Flex gap={40}>
+            <Img src={data.image_url ?? defaultImg} alt={data.title} />
+            <Flex isColumn gap={20}>
+              <Text fontWeight={600} fontSize={24}>
+                {data.title}
               </Text>
-            </Flex>
-            <Flex gap={4}>
-              {datas.major.map((data) => (
-                <MajorTag major={data} variant="dark"></MajorTag>
-              ))}
+              <Flex gap={12} alignItems="center">
+                <Text fontSize={16}>{data.author.name}</Text>
+                <Text fontSize={16} color={colors.gray[500]}>
+                  {formattedDate}
+                </Text>
+              </Flex>
+              <Flex gap={4}>
+                <MajorTag major={data.major} variant="dark" />
+              </Flex>
             </Flex>
           </Flex>
+          <Flex gap={8}>
+            {isAuthor ? (
+              <>
+                <Button onClick={() => setIsModalOpen(true)}>지원자 목록</Button>
+                <Button
+                  onClick={() => navigate(`/main/edit/${postId}`)}
+                  backgroundColor={colors.gray[50]}
+                  color={colors.gray[900]}
+                >
+                  수정
+                </Button>
+              </>
+            ) : (
+              <Button onClick={handleApply} disabled={isApplying}>
+                {isApplying ? '지원 중...' : '지원하기'}
+              </Button>
+            )}
+          </Flex>
         </Flex>
-        <Button>지원하기</Button>
+        <Flex isColumn gap={12}>
+          <Text fontSize={20} fontWeight={600}>
+            멘토링 내용
+          </Text>
+          <Text fontSize={20} fontWeight={400}>
+            {data.description}
+          </Text>
+        </Flex>
       </Flex>
-      <Flex isColumn gap={12}>
-        <Text fontSize={20} fontWeight={600}>
-          멘토링 내용
-        </Text>
-        <Text fontSize={20} fontWeight={400}>
-          {datas.content}
-        </Text>
-      </Flex>
-    </Flex>
+
+      <ParticModal
+        isOpen={isModalOpen}
+        postId={postId}
+        onClose={() => setIsModalOpen(false)}
+        onPrev={() => setIsModalOpen(false)}
+      />
+    </>
   );
 };
 

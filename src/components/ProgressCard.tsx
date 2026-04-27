@@ -3,18 +3,25 @@ import Button from "./Button";
 import { MajorTag } from "./MajorTag";
 import { PhoneIcon } from "../assets";
 
+const STATUS_LABEL: Record<string, string> = {
+  IN_PROGRESS: "진행중",
+  COMPLETED: "완료",
+};
+
 interface ProgressProps {
   title: string;
   status: string;
   major: string;
-  phone: string;
+  mentor_contact: string;
+  onComplete?: () => void;
 }
 
 export const ProgressCard = ({
   title,
   status,
   major,
-  phone,
+  mentor_contact,
+  onComplete,
 }: ProgressProps) => {
   return (
     <Flex
@@ -32,7 +39,7 @@ export const ProgressCard = ({
             {title}
           </Text>
           <Text fontSize={16} fontWeight={600} color="#4099FF">
-            {status}
+            {STATUS_LABEL[status] ?? status}
           </Text>
         </Flex>
 
@@ -41,13 +48,19 @@ export const ProgressCard = ({
           <Flex gap={6} alignItems="center">
             <img src={PhoneIcon} />
             <Text fontSize={12} fontWeight={400}>
-              {phone}
+              {mentor_contact}
             </Text>
           </Flex>
         </Flex>
       </Flex>
 
-      <Button children="완료하기" />
+      <Button
+        onClick={onComplete}
+        backgroundColor={status === "COMPLETED" ? colors.gray[100] : undefined}
+        color={status === "COMPLETED" ? colors.gray[500] : undefined}
+      >
+        완료하기
+      </Button>
     </Flex>
   );
 };

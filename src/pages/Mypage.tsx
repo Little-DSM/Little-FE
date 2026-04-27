@@ -6,116 +6,45 @@ import { MajorTag } from "../components/MajorTag";
 import { Post } from "../components/Post";
 import { ReviewCard } from "../components/ReviewCard";
 import bigStar from "../assets/big_star.svg";
-
-const RATING_DATA = [
-  { label: "1점", value: 30 },
-  { label: "2점", value: 10 },
-  { label: "3점", value: 20 },
-  { label: "4점", value: 40 },
-  { label: "5점", value: 10 },
-];
-
-const MAX_VALUE = Math.max(...RATING_DATA.map((d) => d.value));
-
-const DUMMY_REVIEWS = [
-  {
-    id: 1,
-    name: "익명의 고라니",
-    rating: 1,
-    date: "2025.10.10",
-    postTitle: "[React 멘토링 해주세요]",
-    content: "너무 별로에요.",
-  },
-  {
-    id: 2,
-    name: "행복한 토끼",
-    profileImg:
-      "https://i.pinimg.com/736x/05/7a/16/057a1660313978eadc03d6d0c793b20d.jpg",
-    rating: 4,
-    date: "2025.10.10",
-    postTitle: "[React 멘토링 해주세요]",
-    content: "설명을 정말 잘 해주셨어요. 덕분에 많이 배웠습니다!",
-  },
-  {
-    id: 3,
-    name: "조용한 판다",
-    rating: 3,
-    date: "2025.10.09",
-    postTitle: "[Next.js 멘토링 부탁드려요]",
-    content: "무난했습니다. 조금 더 자세한 설명이 있었으면 좋겠어요.",
-  },
-];
-
-const DUMMY_POSTS = [
-  {
-    id: 1,
-    title: "리액트에 대해 알려주세요!알려달라고요..",
-    author: "오찬영",
-    date: "2024.10.11.",
-    view: 120000,
-    imgUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkJPKBtdZlkQMf3wB1nhKDThY_drt2UyZ_kg&s",
-    major: "Frontend",
-  },
-  {
-    id: 2,
-    title: "리액트에 대해 알려주세요!알려달라고요..",
-    author: "오찬영",
-    date: "2024.10.11.",
-    view: 120000,
-    imgUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkJPKBtdZlkQMf3wB1nhKDThY_drt2UyZ_kg&s",
-    major: "Frontend",
-  },
-  {
-    id: 3,
-    title: "리액트에 대해 알려주세요!알려달라고요..",
-    author: "오찬영",
-    date: "2024.10.11.",
-    view: 120000,
-    imgUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkJPKBtdZlkQMf3wB1nhKDThY_drt2UyZ_kg&s",
-    major: "Frontend",
-  },
-  {
-    id: 4,
-    title: "리액트에 대해 알려주세요!알려달라고요..",
-    author: "오찬영",
-    date: "2024.10.11.",
-    view: 120000,
-    imgUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkJPKBtdZlkQMf3wB1nhKDThY_drt2UyZ_kg&s",
-    major: "Frontend",
-  },
-  {
-    id: 5,
-    title: "리액트에 대해 알려주세요!알려달라고요..",
-    author: "오찬영",
-    date: "2024.10.11.",
-    view: 120000,
-    imgUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkJPKBtdZlkQMf3wB1nhKDThY_drt2UyZ_kg&s",
-    major: "Frontend",
-  },
-  {
-    id: 6,
-    title: "리액트에 대해 알려주세요!알려달라고요..",
-    author: "오찬영",
-    date: "2024.10.11.",
-    view: 120000,
-    imgUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkJPKBtdZlkQMf3wB1nhKDThY_drt2UyZ_kg&s",
-    major: "Frontend",
-  },
-];
+import { useMe } from "../hooks/useMe";
+import { useMentorReviews } from "../hooks/useMentors";
+import { usePosts } from "../hooks/usePosts";
 
 export const Mypage = () => {
+  const { data: me, isLoading: meLoading, isError: meError } = useMe();
+  const { data: reviewData } = useMentorReviews(me?.id);
+  const { data: posts } = usePosts();
+  const displayRating = reviewData?.average_rating ?? me?.rating_average;
+
+  const distribution = reviewData?.distribution;
+  const ratingData = distribution
+    ? [
+        { label: "1점", value: distribution.one_star },
+        { label: "2점", value: distribution.two_star },
+        { label: "3점", value: distribution.three_star },
+        { label: "4점", value: distribution.four_star },
+        { label: "5점", value: distribution.five_star },
+      ]
+    : [];
+  const maxValue = ratingData.length > 0 ? Math.max(...ratingData.map((d) => d.value)) : 0;
+
+  if (meLoading) {
+    return <Text fontSize={16} color={colors.gray[600]}>불러오는 중...</Text>;
+  }
+
+  if (meError || !me) {
+    return <Text fontSize={16} color={colors.gray[600]}>마이페이지 정보를 불러오지 못했습니다.</Text>;
+  }
+
   return (
     <Flex width="100%" height="80vh" gap={100}>
       <Flex isColumn={true} gap={86} paddingTop="20px" paddingLeft="20px">
         <Flex gap={40} alignItems="center">
           <Profile>
-            <ProfileImg src={ProfileIcon} alt="프로필" />
+            <ProfileImgEl
+              src={me?.profile_image ?? ProfileIcon}
+              alt="프로필"
+            />
             <UpdateButton>
               <UpdateImg src={PencilIcon} alt="프로필 수정" />
             </UpdateButton>
@@ -123,17 +52,16 @@ export const Mypage = () => {
 
           <Flex isColumn={true} gap={12}>
             <Text fontSize={24} fontWeight={600}>
-              {"오찬영"}
+              {me.name}
             </Text>
             <Text fontSize={20} fontWeight={400} color={`${colors.gray[500]}`}>
-              {"안녕하세요. 전 게임전공 찬영이에요"}
+              {me.introduction ?? ""}
             </Text>
-
-            <Flex gap={10}>
-              <MajorTag major="Game" variant="dark" />
-              <MajorTag major="Game" variant="dark" />
-              <MajorTag major="Game" variant="dark" />
-            </Flex>
+            {me.major && (
+              <Flex gap={10}>
+                <MajorTag major={me.major} variant="dark" />
+              </Flex>
+            )}
           </Flex>
         </Flex>
 
@@ -142,14 +70,13 @@ export const Mypage = () => {
             게시물
           </Text>
           <PostGrid>
-            {DUMMY_POSTS.map((post) => (
+            {posts?.map((post) => (
               <Post
                 key={post.id}
+                id={post.id}
                 title={post.title}
-                author={post.author}
-                date={post.date}
-                view={post.view}
-                imgUrl={post.imgUrl}
+                date={post.created_at}
+                image_url={post.image_url}
                 major={post.major}
               />
             ))}
@@ -158,65 +85,64 @@ export const Mypage = () => {
       </Flex>
 
       <Flex isColumn={true} gap={24}>
-        {/* 그래프 섹션 */}
         <Flex gap={40} alignItems="center">
           <Flex isColumn={true} gap={8} alignItems="center">
             <Flex gap={8} alignItems="center">
               <img src={bigStar} alt="star" width={32} height={32} />
               <Text fontSize={28} fontWeight={700} color={colors.gray[1000]}>
-                3.2
+                {displayRating != null ? displayRating.toFixed(1) : "-"}
               </Text>
             </Flex>
             <Text fontSize={20} fontWeight={400} color={colors.gray[300]}>
-              총 300건
+              총 {reviewData?.total_reviews ?? me.rating_count ?? 0}건
             </Text>
           </Flex>
-          <BarChart
-            width={220}
-            height={160}
-            data={RATING_DATA}
-            barSize={32}
-            margin={{ top: 20, right: 0, bottom: 0, left: 0 }}
-          >
-            <XAxis
-              dataKey="label"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12, fill: colors.gray[500] }}
-            />
-            <Bar
-              dataKey="value"
-              isAnimationActive
-              animationDuration={800}
-              shape={(props: any) => (
-                <Rectangle
-                  {...props}
-                  radius={[4, 4, 0, 0]}
-                  fill={props.value === MAX_VALUE ? "#4099FF" : "#DDEDFF"}
-                />
-              )}
+          {ratingData.length > 0 && (
+            <BarChart
+              width={220}
+              height={160}
+              data={ratingData}
+              barSize={32}
+              margin={{ top: 20, right: 0, bottom: 0, left: 0 }}
             >
-              <LabelList
-                dataKey="value"
-                position="top"
-                formatter={(v: unknown) => `${v}%`}
-                style={{ fontSize: 11, fill: colors.gray[500] }}
+              <XAxis
+                dataKey="label"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 12, fill: colors.gray[500] }}
               />
-            </Bar>
-          </BarChart>
+              <Bar
+                dataKey="value"
+                isAnimationActive
+                animationDuration={800}
+                shape={(props: any) => (
+                  <Rectangle
+                    {...props}
+                    radius={[4, 4, 0, 0]}
+                    fill={props.value === maxValue ? "#4099FF" : "#DDEDFF"}
+                  />
+                )}
+              >
+                <LabelList
+                  dataKey="value"
+                  position="top"
+                  formatter={(v: unknown) => `${v}%`}
+                  style={{ fontSize: 11, fill: colors.gray[500] }}
+                />
+              </Bar>
+            </BarChart>
+          )}
         </Flex>
 
-        {/* 리뷰 섹션 */}
         <Flex isColumn={true} gap={30}>
-          {DUMMY_REVIEWS.map((review) => (
+          {reviewData?.reviews.map((review, i) => (
             <ReviewCard
-              key={review.id}
-              name={review.name}
-              profileImg={review.profileImg}
+              key={i}
+              name={review.nickname}
               rating={review.rating}
-              date={review.date}
-              postTitle={review.postTitle}
-              content={review.content}
+              date={review.created_at.split("T")[0]}
+              postTitle={review.post_title}
+              content={review.comment}
             />
           ))}
         </Flex>
@@ -241,6 +167,7 @@ const Profile = styled.div`
   border-radius: 100%;
   position: relative;
 `;
+
 const UpdateButton = styled.button`
   width: 27px;
   height: 27px;
@@ -253,10 +180,14 @@ const UpdateButton = styled.button`
   bottom: 4px;
   right: 4px;
 `;
-const ProfileImg = styled.img`
+
+const ProfileImgEl = styled.img`
   width: 84px;
   height: 84px;
+  border-radius: 50%;
+  object-fit: cover;
 `;
+
 const UpdateImg = styled.img`
   width: 16px;
   height: 16px;

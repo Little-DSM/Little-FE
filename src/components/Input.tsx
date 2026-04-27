@@ -6,6 +6,7 @@ interface InputType {
   placeholder: string;
   type?: 'text' | 'search';
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   className?: string;
   value: string;
   label?: string;
@@ -16,6 +17,7 @@ const Input = ({
   placeholder,
   type = 'text',
   onChange,
+  onKeyDown,
   className,
   value,
 }: InputType) => {
@@ -32,6 +34,7 @@ const Input = ({
           value={value}
           placeholder={placeholder}
           onChange={onChange}
+          onKeyDown={onKeyDown}
         />
       </InputContainer>
     </Flex>
