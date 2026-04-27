@@ -9,8 +9,10 @@ import bigStar from "../assets/big_star.svg";
 import { useMe } from "../hooks/useMe";
 import { useMentorReviews } from "../hooks/useMentors";
 import { usePosts } from "../hooks/usePosts";
+import { useNavigate } from "react-router-dom";
 
 export const Mypage = () => {
+  const navigate = useNavigate();
   const { data: me, isLoading: meLoading, isError: meError } = useMe();
   const { data: reviewData } = useMentorReviews(me?.id);
   const { data: posts } = usePosts();
@@ -45,7 +47,7 @@ export const Mypage = () => {
               src={me?.profile_image ?? ProfileIcon}
               alt="프로필"
             />
-            <UpdateButton>
+            <UpdateButton onClick={() => navigate('/main/my/edit')}>
               <UpdateImg src={PencilIcon} alt="프로필 수정" />
             </UpdateButton>
           </Profile>
@@ -182,8 +184,8 @@ const UpdateButton = styled.button`
 `;
 
 const ProfileImgEl = styled.img`
-  width: 84px;
-  height: 84px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   object-fit: cover;
 `;

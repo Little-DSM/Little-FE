@@ -3,6 +3,7 @@ import { RootLayout } from './layouts';
 import {
   EditPage,
   Mypage,
+  MypageUpdate,
   ProgressPage,
   ViewAllPage,
   ViewDetailPage,
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
       {
         path: 'my',
         element: <Mypage />,
+      },
+      {
+        path: 'my/edit',
+        element: <MypageUpdate />,
       },
       {
         path: 'progress',
