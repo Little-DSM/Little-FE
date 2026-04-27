@@ -42,7 +42,7 @@ export const ViewDetailPage = () => {
       <Flex isColumn gap={60} width="100%">
         <Flex justifyContent="space-between" width="100%">
           <Flex gap={40}>
-            <Img src={data.image_url ?? defaultImg} alt={data.title} />
+            <Img src={data.image_url ?? defaultImg} alt={data.title} onError={(e) => { e.currentTarget.src = defaultImg; }} />
             <Flex isColumn gap={20}>
               <Text fontWeight={600} fontSize={24}>
                 {data.title}

@@ -30,6 +30,7 @@ export const Post = ({ id, title, date, image_url, major }: PostProps) => {
         height={184}
         style={{ objectFit: "cover", display: "block", borderRadius: 16 }}
         alt={title}
+        onError={(e) => { e.currentTarget.src = defaultImg; }}
       />
       <Flex isColumn={true} gap={8} width="100%">
         <Text fontSize={16} fontWeight={700} color={colors.gray[1000]}>
