@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ImgSelector, MajorSelector, TextArea } from "../components";
 import Input from "../components/Input";
-import { major } from "../types";
 import { colors, Flex } from "../styles/theme";
 import Button from "../components/Button";
 import { useCreatePost } from "../hooks/usePosts";
@@ -18,7 +17,7 @@ const readFileAsDataUrl = (file: File) =>
 
 export const CreatePage = () => {
   const navigate = useNavigate();
-  const [selectedMajor, setSelectedMajor] = useState<string>(major[0]);
+  const [selectedMajor, setSelectedMajor] = useState<string>('');
   const [datas, setDatas] = useState({
     title: "",
     description: "",
