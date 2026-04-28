@@ -6,16 +6,15 @@ import { MajorTag } from "../components/MajorTag";
 import { Post } from "../components/Post";
 import { ReviewCard } from "../components/ReviewCard";
 import bigStar from "../assets/big_star.svg";
-import { useMe } from "../hooks/useMe";
+import { useMe, useMyPosts } from "../hooks/useMe";
 import { useMentorReviews } from "../hooks/useMentors";
-import { usePosts } from "../hooks/usePosts";
 import { useNavigate } from "react-router-dom";
 
 export const Mypage = () => {
   const navigate = useNavigate();
   const { data: me, isLoading: meLoading, isError: meError } = useMe();
   const { data: reviewData } = useMentorReviews(me?.id);
-  const { data: posts } = usePosts();
+  const { data: myPostsData } = useMyPosts();
   const displayRating = reviewData?.average_rating ?? me?.rating_average;
 
   const distribution = reviewData?.distribution;
@@ -81,12 +80,12 @@ export const Mypage = () => {
           <Text fontSize={16} fontWeight={500}>
             MY 게시물
           </Text>
-          {posts && posts.length > 0 ? (
+          {myPostsData && myPostsData.items.length > 0 ? (
             <PostGrid>
-              {posts.map((post) => (
+              {myPostsData.items.map((post) => (
                 <Post
-                  key={post.id}
-                  id={post.id}
+                  key={post.post_id}
+                  id={post.post_id}
                   title={post.title}
                   date={post.created_at}
                   image_url={post.image_url}

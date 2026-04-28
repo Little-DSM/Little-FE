@@ -37,6 +37,21 @@ export interface MentoringProgressListResponse {
   items: MentoringProgressItem[];
 }
 
+export interface MyPostItem {
+  post_id: number;
+  title: string;
+  image_url: string | null;
+  major: string;
+  author_name: string;
+  created_at: string;
+  view_count: number;
+}
+
+export interface MyPostListResponse {
+  total_count: number;
+  items: MyPostItem[];
+}
+
 export interface UserSummary {
   id: number;
   major: string;

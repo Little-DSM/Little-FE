@@ -3,6 +3,7 @@ import type {
   MyPageResponse,
   MyPageUpdateRequest,
   MentoringProgressListResponse,
+  MyPostListResponse,
 } from '../types/api';
 
 export const getMe = () =>
@@ -15,3 +16,6 @@ export const getMentoringProgress = (status: 'all' | 'in_progress' | 'completed'
   apiClient
     .get<MentoringProgressListResponse>('/me/mentoring-progress', { params: { status } })
     .then((r) => r.data);
+
+export const getMyPosts = () =>
+  apiClient.get<MyPostListResponse>('/me/posts').then((r) => r.data);

@@ -1,10 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getMe, updateMe, getMentoringProgress } from '../api/me';
+import { getMe, updateMe, getMentoringProgress, getMyPosts } from '../api/me';
 import type { MyPageUpdateRequest } from '../types/api';
 
 export const meKeys = {
   profile: ['me'] as const,
   progress: (status: string) => ['me', 'progress', status] as const,
+  posts: ['me', 'posts'] as const,
 };
 
 export const useMe = () =>
@@ -26,5 +27,12 @@ export const useMentoringProgress = (status: 'all' | 'in_progress' | 'completed'
   useQuery({
     queryKey: meKeys.progress(status),
     queryFn: () => getMentoringProgress(status),
+    enabled: !!localStorage.getItem('access_token'),
+  });
+
+export const useMyPosts = () =>
+  useQuery({
+    queryKey: meKeys.posts,
+    queryFn: getMyPosts,
     enabled: !!localStorage.getItem('access_token'),
   });
