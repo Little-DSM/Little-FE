@@ -30,8 +30,6 @@ export const MajorSelector = ({
     setSelectedMajor(e.target.value);
   };
 
-  const showCustomInput = isCustom || (!major.includes(selectedMajor) && selectedMajor === '');
-
   return (
     <Flex isColumn gap={12} width="100%">
       <Text fontSize={16} fontWeight={400} color={colors.gray[900]}>
