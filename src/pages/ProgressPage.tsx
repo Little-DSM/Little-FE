@@ -36,6 +36,7 @@ export const ProgressPage = () => {
           <ProgressCard
             key={progress.post_id}
             completed_at={progress.completed_at}
+            my_role={progress.my_role}
             title={progress.title}
             status={progress.status}
             major={progress.major}
@@ -43,7 +44,7 @@ export const ProgressPage = () => {
             post_id={progress.post_id}
             onClick={() => navigate(`/main/view/${progress.post_id}`)}
             onComplete={
-              progress.completed_at
+              progress.completed_at || progress.my_role !== 'MENTEE'
                 ? undefined
                 : () =>
                     navigate(`/main/review/${progress.post_id}`, {
