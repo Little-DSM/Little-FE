@@ -63,6 +63,7 @@ export const ProgressCard = ({
         onClick={(e) => { e?.stopPropagation(); onComplete?.(); }}
         backgroundColor={status === "COMPLETED" ? colors.gray[100] : undefined}
         color={status === "COMPLETED" ? colors.gray[500] : undefined}
+        disabled={status === "COMPLETED"}
       >
         완료하기
       </Button>
