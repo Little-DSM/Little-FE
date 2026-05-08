@@ -29,6 +29,9 @@ export const ViewDetailPage = () => {
 
   const isAuthor = user?.id === data.author.id;
   const formattedDate = data.created_at.split('T')[0];
+  const handleAuthorClick = () => {
+    navigate(isAuthor ? '/main/my' : `/main/mentor/${data.author.id}`);
+  };
 
   const handleApply = () => {
     apply(undefined, {
@@ -48,7 +51,9 @@ export const ViewDetailPage = () => {
                 {data.title}
               </Text>
               <Flex gap={12} alignItems="center">
-                <Text fontSize={16}>{data.author.name}</Text>
+                <AuthorButton type="button" onClick={handleAuthorClick}>
+                  <Text fontSize={16}>{data.author.name}</Text>
+                </AuthorButton>
                 <Text fontSize={16} color={colors.gray[500]}>
                   {formattedDate}
                 </Text>
@@ -103,4 +108,11 @@ const Img = styled.img`
   border-radius: 10px;
   background-color: #e7e7e7;
   object-fit: cover;
+`;
+
+const AuthorButton = styled.button`
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
 `;

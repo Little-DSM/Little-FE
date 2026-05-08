@@ -35,16 +35,20 @@ export const ProgressPage = () => {
         {data?.items.map((progress) => (
           <ProgressCard
             key={progress.post_id}
+            completed_at={progress.completed_at}
             title={progress.title}
             status={progress.status}
             major={progress.major}
             mentor_contact={progress.mentor_contact}
             post_id={progress.post_id}
             onClick={() => navigate(`/main/view/${progress.post_id}`)}
-            onComplete={() =>
-              navigate(`/main/review/${progress.post_id}`, {
-                state: { mentor_name: progress.mentor_name },
-              })
+            onComplete={
+              progress.completed_at
+                ? undefined
+                : () =>
+                    navigate(`/main/review/${progress.post_id}`, {
+                      state: { mentor_name: progress.mentor_name },
+                    })
             }
           />
         ))}

@@ -23,10 +23,15 @@ export interface MyPageUpdateRequest {
 }
 
 export interface MentoringProgressItem {
+  completed_at: string | null;
+  counterpart_contact: string;
+  counterpart_id: number;
+  counterpart_name: string;
   major: string;
   mentor_contact: string;
   mentor_id: number;
   mentor_name: string;
+  my_role: 'MENTEE' | 'MENTOR';
   post_id: number;
   selected_at: string;
   status: 'IN_PROGRESS' | 'COMPLETED';

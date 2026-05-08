@@ -9,6 +9,7 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 interface ProgressProps {
+  completed_at: string | null;
   title: string;
   status: string;
   major: string;
@@ -19,6 +20,7 @@ interface ProgressProps {
 }
 
 export const ProgressCard = ({
+  completed_at,
   title,
   status,
   major,
@@ -26,6 +28,8 @@ export const ProgressCard = ({
   onClick,
   onComplete,
 }: ProgressProps) => {
+  const isReviewSubmitted = completed_at != null;
+
   return (
     <Flex
       width="100%"
@@ -61,11 +65,11 @@ export const ProgressCard = ({
 
       <Button
         onClick={(e) => { e?.stopPropagation(); onComplete?.(); }}
-        backgroundColor={status === "COMPLETED" ? colors.gray[100] : undefined}
-        color={status === "COMPLETED" ? colors.gray[500] : undefined}
-        disabled={status === "COMPLETED"}
+        backgroundColor={isReviewSubmitted ? colors.gray[100] : undefined}
+        color={isReviewSubmitted ? colors.gray[500] : undefined}
+        disabled={isReviewSubmitted}
       >
-        완료하기
+        {isReviewSubmitted ? "리뷰 완료" : "완료하기"}
       </Button>
     </Flex>
   );
