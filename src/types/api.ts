@@ -88,6 +88,7 @@ export interface MentoringPostCreate {
   description: string;
   image_url?: string | null;
   major: string;
+  role: 'MENTEE' | 'MENTOR';
   title: string;
 }
 

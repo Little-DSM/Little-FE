@@ -31,8 +31,15 @@ export const ProgressCard = ({
   onComplete,
 }: ProgressProps) => {
   const isReviewSubmitted = completed_at != null;
-  const canReview = my_role === 'MENTEE' && !isReviewSubmitted;
-  const buttonLabel = isReviewSubmitted ? '리뷰 완료' : my_role === 'MENTEE' ? '완료하기' : '리뷰 권한 없음';
+  const isMentee = my_role === 'MENTEE';
+  const canReview = isMentee && !isReviewSubmitted;
+  const buttonLabel = isMentee
+    ? isReviewSubmitted
+      ? '리뷰 완료'
+      : '완료하기'
+    : isReviewSubmitted
+      ? '리뷰 남겨짐'
+      : '리뷰 대기';
 
   return (
     <Flex
