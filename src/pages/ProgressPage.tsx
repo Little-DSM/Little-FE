@@ -39,7 +39,7 @@ export const ProgressPage = () => {
             title={progress.title}
             status={progress.status}
             major={progress.major}
-            mentor_contact={progress.mentor_contact}
+            counterpart_contact={progress.counterpart_contact}
             post_id={progress.post_id}
             onClick={() => navigate(`/main/view/${progress.post_id}`)}
             onComplete={

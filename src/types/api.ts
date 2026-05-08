@@ -5,6 +5,7 @@ export interface AuthTokenPairResponse {
 }
 
 export interface MyPageResponse {
+  contact: string | null;
   email: string | null;
   id: number;
   introduction: string | null;
@@ -16,6 +17,7 @@ export interface MyPageResponse {
 }
 
 export interface MyPageUpdateRequest {
+  contact?: string | null;
   introduction?: string;
   major?: string;
   name?: string;

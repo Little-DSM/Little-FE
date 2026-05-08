@@ -13,7 +13,7 @@ interface ProgressProps {
   title: string;
   status: string;
   major: string;
-  mentor_contact: string;
+  counterpart_contact: string;
   post_id: number;
   onClick?: () => void;
   onComplete?: () => void;
@@ -24,7 +24,7 @@ export const ProgressCard = ({
   title,
   status,
   major,
-  mentor_contact,
+  counterpart_contact,
   onClick,
   onComplete,
 }: ProgressProps) => {
@@ -57,7 +57,7 @@ export const ProgressCard = ({
           <Flex gap={6} alignItems="center">
             <img src={PhoneIcon} />
             <Text fontSize={12} fontWeight={400}>
-              {mentor_contact}
+              {counterpart_contact}
             </Text>
           </Flex>
         </Flex>

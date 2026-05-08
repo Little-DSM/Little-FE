@@ -14,6 +14,14 @@ const MAJORS = [
   'Game', 'Embedded', 'Security', 'AI', 'Design', 'DevOps',
 ];
 
+const formatContact = (value: string) => {
+  const digits = value.replace(/\D/g, '').slice(0, 11);
+
+  if (digits.length < 4) return digits;
+  if (digits.length < 8) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+};
+
 export const MypageUpdate = () => {
   const navigate = useNavigate();
   const { data: me } = useMe();
@@ -21,6 +29,7 @@ export const MypageUpdate = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState('');
+  const [contact, setContact] = useState('');
   const [introduction, setIntroduction] = useState('');
   const [selectedMajor, setSelectedMajor] = useState('');
   const [isCustom, setIsCustom] = useState(false);
@@ -30,6 +39,7 @@ export const MypageUpdate = () => {
   useEffect(() => {
     if (!me) return;
     setName(me.name);
+    setContact(me.contact ?? '');
     setIntroduction(me.introduction ?? '');
     setPreviewImage(me.profile_image);
     if (me.major) {
@@ -66,6 +76,7 @@ export const MypageUpdate = () => {
     updateMe(
       {
         name: name || undefined,
+        contact: contact || null,
         introduction: introduction || undefined,
         major: major || undefined,
         profile_image: previewImage || undefined,
@@ -113,6 +124,13 @@ export const MypageUpdate = () => {
             placeholder="이름을 입력해주세요."
             value={name}
             onChange={(e) => setName(e.target.value)}
+          />
+
+          <Input
+            label="연락처"
+            placeholder="연락처를 입력해주세요."
+            value={contact}
+            onChange={(e) => setContact(formatContact(e.target.value))}
           />
 
           <TextArea
