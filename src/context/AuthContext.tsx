@@ -7,6 +7,7 @@ interface AuthContextValue {
   isLoading: boolean;
   login: (accessToken: string, refreshToken: string) => Promise<void>;
   logout: () => void;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -37,6 +38,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(me);
   };
 
+  const refreshUser = async () => {
+    const me = await getMe();
+    setUser(me);
+  };
+
   const logout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
@@ -44,7 +50,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, login, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -45,6 +45,14 @@ const NAV_ITEMS = [
   },
 ];
 
+const getNameFontSize = (name: string): number => {
+  const len = name.length;
+  if (len <= 6) return 24;
+  if (len <= 9) return 20;
+  if (len <= 12) return 16;
+  return 13;
+};
+
 export const SideBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -76,7 +84,7 @@ export const SideBar = () => {
 
           <Flex isColumn={true} gap={8}>
             <Flex gap={8} alignItems="flex-start">
-              <Text fontSize={24} fontWeight={600}>
+              <Text fontSize={getNameFontSize(user?.name ?? "")} fontWeight={600}>
                 {user?.name ?? "-"}
               </Text>
               {user?.major && <MajorTag major={user.major} />}

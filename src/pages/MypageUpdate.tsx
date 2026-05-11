@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { colors, Flex, Text } from '../styles/theme';
 import { useMe, useUpdateMe } from '../hooks/useMe';
+import { useAuth } from '../context/AuthContext';
 import Input from '../components/Input';
 import { TextArea } from '../components/TextArea';
 import Button from '../components/Button';
@@ -24,6 +25,7 @@ const formatContact = (value: string) => {
 
 export const MypageUpdate = () => {
   const navigate = useNavigate();
+  const { refreshUser } = useAuth();
   const { data: me } = useMe();
   const { mutate: updateMe, isPending } = useUpdateMe();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -81,7 +83,7 @@ export const MypageUpdate = () => {
         major: major || undefined,
         profile_image: previewImage || undefined,
       },
-      { onSuccess: () => navigate('/main/my') },
+      { onSuccess: async () => { await refreshUser(); navigate('/main/my'); } },
     );
   };
 
