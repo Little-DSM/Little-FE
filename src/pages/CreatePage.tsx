@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ImgSelector, MajorSelector, TextArea } from "../components";
+import { ImgSelector, MajorSelector, TextArea, Toggle } from "../components";
 import Input from "../components/Input";
-import { colors, Flex } from "../styles/theme";
+import { colors, Flex, Text } from "../styles/theme";
 import Button from "../components/Button";
 import { useCreatePost } from "../hooks/usePosts";
 
@@ -18,6 +18,7 @@ const readFileAsDataUrl = (file: File) =>
 export const CreatePage = () => {
   const navigate = useNavigate();
   const [selectedMajor, setSelectedMajor] = useState<string>('');
+  const [role, setRole] = useState<'MENTEE' | 'MENTOR'>('MENTEE');
   const [datas, setDatas] = useState({
     title: "",
     description: "",
@@ -58,6 +59,7 @@ export const CreatePage = () => {
         description: datas.description,
         major: selectedMajor,
         image_url: datas.imageUrl,
+        role,
       },
       {
         onSuccess: (post) => navigate(`/main/view/${post.id}`),
@@ -87,6 +89,23 @@ export const CreatePage = () => {
           setSelectedMajor={setSelectedMajor}
           selectedMajor={selectedMajor}
         />
+        <Flex isColumn gap={12}>
+          <Text fontSize={16} color={colors.gray[900]}>
+            역할
+          </Text>
+          <Flex alignItems="center" gap={12}>
+            <Text fontSize={14} color={role === 'MENTEE' ? colors.gray[900] : colors.gray[500]}>
+              멘티
+            </Text>
+            <Toggle
+              value={role === 'MENTOR'}
+              onChange={(isMentor) => setRole(isMentor ? 'MENTOR' : 'MENTEE')}
+            />
+            <Text fontSize={14} color={role === 'MENTOR' ? colors.gray[900] : colors.gray[500]}>
+              멘토
+            </Text>
+          </Flex>
+        </Flex>
         <TextArea
           onChange={(e) =>
             setDatas((prev) => ({ ...prev, description: e.target.value }))
